@@ -1,0 +1,18 @@
+{
+  "type": "module",
+  "name": "audatex_scrapper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "LanAlmeida",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^20.11.24",
+    "luxon": "^3.4.4",
+    "xlsx": "^0.18.5"
+  }
+}

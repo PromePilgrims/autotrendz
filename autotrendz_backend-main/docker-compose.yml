@@ -1,0 +1,47 @@
+services:
+  autotrendz_app:
+    container_name: autotrendz_app
+    platform: linux/x86_64
+    image: ghcr.io/autotrendz/autotrendz_backend:latest
+    restart: always
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    networks:
+      - main
+      - autotrendz_network
+
+  db:
+    container_name: autotrendz_db
+    image: postgres:16.0
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - ./.data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - autotrendz_network
+
+  redis:
+    image: redis:7.4.2
+    restart: always
+    volumes:
+      - ./config/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./.redis-data:/data
+    networks:
+      - autotrendz_network
+
+networks:
+  autotrendz_network:
+    driver: bridge
+  main:
+    external: true

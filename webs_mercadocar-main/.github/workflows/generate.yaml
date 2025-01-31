@@ -1,0 +1,28 @@
+name: Run Scraper
+
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        description: 'Sitemap URL to generate'
+        required: true
+        default: 'https://www.mercadocar.com.br/sitemap-1.xml'
+
+jobs:
+  run-scraper:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      run: yarn install
+
+    - name: Run sitemap scraper
+      run: yarn ts-node src/index.ts ${{ github.event.inputs.command }}

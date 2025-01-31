@@ -1,0 +1,9 @@
+.clip {
+  clip-path: polygon(100% 0, 100% 38%, 100% 100%, 0 100%, 0 23%)
+}
+
+@media (max-width: 610px) {
+  .clip {
+    clip-path: polygon(100% 0, 100% 38%, 100% 100%, 0 100%, 0 15%)
+  }
+}

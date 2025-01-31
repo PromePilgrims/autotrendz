@@ -1,0 +1,17 @@
+                              | Maio | Junho | Julho | Agosto | Setembro | Outubro | Novembro | Dezembro | Big |
+Altese (VTEX)                 | [X]  |  [X]  |  [X]  |  [X]   |   [X]    |   [X]   |   [ ]    |   [X]    | [ ] |
+Bompreço Auto Peças           | [X]  |  [X]  |  [X]  |  [X]   |   [X]    |   [ ]   |   [ ]    |   [X]    | [X] |
+Cornélio Autopeças [EQ][Slow] | [X]  |  [X]  |  [X]  |  [X]   |   [X]    |   [X]   |   [ ]    |   [X]    | [ ] |
+Dispemec [EQ][Slow]           | [X]  |  [X]  |  [X]  |  [X]   |   [X]    |   [X]   |   [ ]    |   [X]    | [ ] |
+HiperVarejo                   | [X]  |  [X]  |  [X]  |  [X]   |   [X]    |   [X]   |   [ ]    |   [X]    | [ ] |
+Josecar Autopeças [EQ]        | [X]  |  [X]  |  [X]  |  [X]   |   [X]    |   [X]   |   [ ]    |   [X]    | [ ] |
+Krambeck                      | [X]  |  [X]  |  [X]  |  [X]   |   [X]    |   [X]   |   [ ]    |   [X]    | [ ] |
+Loja Mecanico                 | [X]  |  [X]  |  [X]  |  [X]   |   [X]    |   [ ]   |   [ ]    |   [X]    | [X] |
+Machado Auto Parts            | [X]  |  [X]  |  [X]  |  [X]   |   [X]    |   [X]   |   [ ]    |   [X]    | [ ] |
+Marquinho Motos (VTEX)        | [X]  |  [X]  |  [X]  |  [X]   |   [X]    |   [X]   |   [ ]    |   [X]    | [ ] |
+Molina                        | [X]  |  [X]  |  [X]  |  [X]   |   [X]    |   [ ]   |   [ ]    |   [X]    | [X] |
+Monumento Peças[Slow]         | [X]  |  [X]  |  [X]  |  [X]   |   [X]    |   [X]   |   [ ]    |   [X]    | [ ] |
+Paulinho Motos                | [X]  |  [X]  |  [X]  |  [X]   |   [X]    |   [X]   |   [ ]    |   [ ]    | [ ] |
+Peças Bitts                   | [X]  |  [X]  |  [X]  |  [-]   |   [X]    |   [X]   |   [ ]    |   [ ]    | [ ] |
+PitStop (VTEX)                | [X]  |  [X]  |  [X]  |  [X]   |   [X]    |   [ ]   |   [ ]    |   [X]    | [X] |
+MercadoCar                    | [X]  |  [X]  |  [ ]  |  [X]   |   [X]    |   [X]   |   [ ]    |   [X]    | [X] |

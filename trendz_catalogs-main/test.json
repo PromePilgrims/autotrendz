@@ -1,0 +1,2666 @@
+{
+  "lista": {
+    "base": "SELECT DISTINCT {codTabP}#1, CASE WHEN IfNull(upper(PRODUTO.CpoAuxProd11), '') IN ('S', 'SIM', '1') THEN 1 ELSE 0 END AS NaoVendidoAvulso, CASE WHEN IfNull(upper(PRODUTO.CpoAuxProd11), '') IN ('S', 'SIM', '1') THEN 1 ELSE 0 END AS NaoInsereNoCarrinho, CASE WHEN IfNull(upper(PRODUTO.CpoAuxProd2), '') IN ('X', 'SIM') THEN 1 ELSE 0 END AS ComRetentor, CASE WHEN (SELECT 1 FROM CONJ_PRODS WHERE CodProdConj = PRODUTO.CodigoProduto LIMIT 1) IS NULL THEN 0 ELSE 1 END AS Conjunto, CASE WHEN (SELECT 1 FROM CONJ_PRODS WHERE CodProdComp = PRODUTO.CodigoProduto LIMIT 1) IS NULL THEN '0' ELSE '1' END AS ItemConjunto, PRODUTO.Unidade, PRODUTO.DescricaoProduto, (SELECT FABRICANTE.DescricaoFabricante FROM FABRICANTE WHERE FABRICANTE.CodigoFabricante = PRODUTO.CodigoFabricante LIMIT 1) AS Marca, PRODUTO.CodigoProduto, PRODUTO.DescricaoProduto<IDM> AS DescricaoProduto, PRODUTO.NumeroProduto, upper(PRODUTO.ArquivoFotoProduto) AS ArquivoFotoProduto, upper(PRODUTO.ArquivoFotoProduto2) AS ArquivoFotoProduto2, upper('') AS ArquivoFotoProduto3, PRODUTO.FlagLancamento, PRODUTO.FlagPromocao, PRODUTO.FlagPontaEstoque, PRODUTO.DataFlagLancamento, PRODUTO.DataFlagPromocao, PRODUTO.DataFlagPontaEstoque, (SELECT Group_Concat(Aplics, '') || CASE WHEN (SELECT Count(DISTINCT  APLICACAO.CodigoFabricante) FROM PRODUTO_APLICACAO INNER JOIN APLICACAO ON PRODUTO_APLICACAO.CodigoAplicacao = APLICACAO.CodigoAplicacao WHERE PRODUTO_APLICACAO.CodigoProduto = PRODUTO.CodigoProduto) > 2 THEN '' || '<span class=listaMais>Mais aplicações...</span>'  ELSE '' END FROM (SELECT CASE WHEN Min(DescricaoFabricante<IDM>) IS Null OR Min(DescricaoFabricante<IDM>) ='' THEN '<span class=listaMontadora></span>' ELSE '<span class=listaMontadora>' || Min(DescricaoFabricante<IDM>) || '</span>' END || '<span class=\"listaVeiculo aplicacaoItem1 aplicacaoItem2 {veiculoAux}#5\">' || replace(Group_Concat('<span class=\"DescricaoAplicacao\">' || DescricaoAplicacao<IDM>{veiculoAux}#6 || '</span>'{veiculoAux}#1, CASE WHEN temaplic = 1 THEN ', ' ELSE '' END),'<br>', ' {veiculoAux}#4 ') || '</span>' AS Aplics FROM (SELECT DISTINCT FABRICANTE.DescricaoFabricante<IDM>, FABRICANTE.FlagProduto, FABRICANTE.FlagAplicacao, APLICACAO.DescricaoAplicacao<IDM>{veiculoAux}#2, CASE WHEN DescricaoAplicacao<IDM> <> '' THEN 1 ELSE 0 END AS temaplic, APLICACAO.CodigoFabricante FROM PRODUTO_APLICACAO INNER JOIN APLICACAO ON PRODUTO_APLICACAO.CodigoAplicacao = APLICACAO.CodigoAplicacao LEFT JOIN FABRICANTE ON APLICACAO.CodigoFabricante = FABRICANTE.CodigoFabricante WHERE PRODUTO_APLICACAO.CodigoProduto = PRODUTO.CodigoProduto AND /* APLICACAO.DescricaoAplicacao<IDM> <> PRODUTO.DescricaoProduto<IDM> está condição foi utilizada porque a maioria das aplicações é igual a descrição do produto */ substr(APLICACAO.DescricaoAplicacao<IDM>, 1, 15) <> substr(PRODUTO.DescricaoProduto<IDM>, 1, 15) AND ({montadora}#3) AND {veiculo}#3 AND {veiculo_text}#3 AND {complementoAplicacao}#3 ORDER BY CASE WHEN (({montadora}#1) AND {veiculo}#1 AND {veiculo_text}#1 AND {complementoAplicacao}#1) THEN 0 ELSE 1 END, CASE WHEN {palavrachave}#1 THEN 0 ELSE 1 END, APLICACAO.CodigoFabricante, APLICACAO.DescricaoAplicacao<IDM>) GROUP BY CodigoFabricante ORDER BY CASE WHEN (({montadora}#1) AND {veiculo}#1 AND {veiculo_text}#1 AND {complementoAplicacao}#1) THEN 0 ELSE 1 END, CASE WHEN {palavrachave}#1 THEN 0 ELSE 1 END, DescricaoFabricante<IDM> LIMIT 2)) AS DescricaoAplicacao, (SELECT Group_Concat(NumeroProduto, ', ') FROM (SELECT [Replace](REFERENCIACRUZADA.NumeroProduto, '<br>', '') AS NumeroProduto, FABRICANTE.DescricaoFabricante FROM REFERENCIACRUZADA INNER JOIN FABRICANTE ON REFERENCIACRUZADA.CodigoFabricante = FABRICANTE.CodigoFabricante WHERE REFERENCIACRUZADA.CodigoProduto = PRODUTO.CodigoProduto AND (({palavrachave}#2) OR ({codigo}#1) OR ({codigoConversao}#1)) ORDER BY [Replace](REFERENCIACRUZADA.NumeroProduto, '<br>', '') LIMIT 3)) AS NumeroOriginal FROM <COUNT> PRODUTO WHERE {joinaplicacaoaux}#1 EXISTS ( SELECT 1 FROM PRODUTO_APLICACAO INNER JOIN APLICACAO ON PRODUTO_APLICACAO.CodigoAplicacao = APLICACAO.CodigoAplicacao LEFT JOIN FABRICANTE ON APLICACAO.CodigoFabricante = FABRICANTE.CodigoFabricante WHERE PRODUTO_APLICACAO.CodigoProduto = PRODUTO.CodigoProduto AND {montadora}#5 AND {codtipoaplicacao}#1 AND {checkbox_tipoaplicacao_1}#1 AND {checkbox_tipoaplicacao_2}#1 AND {checkbox_tipoaplicacao_3}#1 AND {anocomposto}#1 AND {ano}#1 AND {veiculo}#1 AND {veiculo_text}#1 AND {complementoAplicacao}#1 ) AND {joinaplicacaoaux}#2 ( ({palavrachave}#3 OR {palavrachave}#4)) AND {produto_text}#1 AND {conjunto}#1",
+    "filtro": {
+      "palavrachave": {
+        "sql": "1=1",
+        "tipo": "conjuntopalavra",
+        "founds": {
+          "found1": "OR:(Upper(DescricaoAplicacao<IDM>) GLOB ('*?*') OR Upper(DescricaoFabricante<IDM>) GLOB ('*?*'))",
+          "found2": "OR:(Upper(REFERENCIACRUZADA.NumeroProduto) GLOB '*?*' OR REFERENCIACRUZADA.NumeroProdutoPesq GLOB '*?*')",
+          "found3": "Upper(PRODUTO.DescricaoProduto<IDM>) GLOB Upper('*?*')",
+          "found4": "Upper(PRODUTO.PCs<IDM>) GLOB REPLACE(Upper('*?*'), '0', 'O')"
+        },
+        "notfounds": {
+          "notfound1": "1=1",
+          "notfound2": "1=2",
+          "notfound3": "1=1",
+          "notfound4": "1=1"
+        }
+      },
+      "codTabP": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "replace(printf('%.2f', (SELECT PI FROM TABPI WHERE TABPI.CodigoProduto = PRODUTO.CodigoProduto AND TABPI.CodigoTabP='?')), '.', ',') AS Preco"
+        },
+        "notfounds": {
+          "notfound1": "PRODUTO.PrecoProduto AS Preco"
+        }
+      },
+      "codigoOriginal": {
+        "sql": "upper(PRODUTO.NumeroProdutoPesq) GLOB upper('*?*')",
+        "tipo": "codigo"
+      },
+      "codigoConversao": {
+        "sql": "(upper(PRODUTO.CodigoProduto) IN (SELECT CodigoProduto FROM REFERENCIACRUZADA WHERE upper(NumeroProdutoPesq) GLOB upper('*?*')))",
+        "tipo": "codigo",
+        "founds": {
+          "found1": "upper(REFERENCIACRUZADA.NumeroProdutoPesq) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=2"
+        }
+      },
+      "codigo": {
+        "sql": "(upper(PRODUTO.NumeroProdutoPesq) GLOB upper('*?*') OR upper(PRODUTO.CodigoProduto) IN (SELECT CodigoProduto FROM REFERENCIACRUZADA WHERE upper(NumeroProdutoPesq) GLOB upper('*?*')))",
+        "tipo": "codigo",
+        "founds": {
+          "found1": "upper(REFERENCIACRUZADA.NumeroProdutoPesq) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=2"
+        }
+      },
+      "codgrupo": {
+        "sql": "PRODUTO.CodigoGrupoProduto = '?'"
+      },
+      "codsubgrupo": {
+        "sql": "PRODUTO.CodigoSubGrupoProduto = '?'"
+      },
+      "linha": {
+        "sql": "PRODUTO.CodigoGrupoProduto = '?'"
+      },
+      "codfabricante": {
+        "sql": "PRODUTO.CodigoFabricante = '?'"
+      },
+      "produto": {
+        "sql": "PRODUTO.DescricaoProduto<IDM> = '?'"
+      },
+      "produto_text": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "upper(PRODUTO.DescricaoProduto<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "montadora": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "DescricaoFabricante<IDM>='?' AND FlagAplicacao = 1",
+          "found2": "1=2",
+          "found3": "FABRICANTE.DescricaoFabricante<IDM> = '?' AND FlagAplicacao = 1",
+          "found4": "<br>",
+          "found5": "FABRICANTE.DescricaoFabricante<IDM> = '?' AND FABRICANTE.FlagAplicacao = 1"
+        },
+        "notfounds": {
+          "notfound1": "1=1",
+          "notfound2": "1=1",
+          "notfound3": "1=1",
+          "notfound4": ":",
+          "notfound5": "1=1"
+        }
+      },
+      "codtipoaplicacao": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoTipoAplicacao = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "checkbox_tipoaplicacao_1": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoTipoAplicacao = 1"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "checkbox_tipoaplicacao_2": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoTipoAplicacao = 2"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "checkbox_tipoaplicacao_3": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoTipoAplicacao = 3"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "joinaplicacaoaux": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "",
+          "found2": ""
+        },
+        "notfounds": {
+          "notfound1": "/*",
+          "notfound2": "*/"
+        }
+      },
+      "veiculo_text": {
+        "sql": "1=1",
+        "tipo": "aplicacao",
+        "founds": {
+          "found1": "Upper(DescricaoAplicacao<IDM>) GLOB upper('*?*')",
+          "found2": "1=2",
+          "found3": "Upper(APLICACAO.DescricaoAplicacao<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1",
+          "notfound2": "1=1",
+          "notfound3": "1=1"
+        }
+      },
+      "veiculo": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "DescricaoAplicacao<IDM> = '?'",
+          "found2": "1=2",
+          "found3": "APLICACAO.DescricaoAplicacao<IDM> = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1",
+          "notfound2": "1=1",
+          "notfound3": "1=1"
+        }
+      },
+      "complementoAplicacao": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "ComplementoAplicacao = '?'",
+          "found2": "1=2",
+          "found3": "APLICACAO.ComplementoAplicacao = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1",
+          "notfound2": "1=1",
+          "notfound3": "1=1"
+        }
+      },
+      "veiculoAux": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "|| CASE WHEN IfNull(ComplementoAplicacao, '') <> '' THEN '<span class=\"ComplementoAplicacao\">' || ComplementoAplicacao || ')</span>' ELSE '' END",
+          "found2": ", '' AS ComplementoAplicacao",
+          "found3": "<br>",
+          "found4": "<br>",
+          "found5": "semLimitacao",
+          "found6": "|| CASE WHEN IfNull(ComplementoAplicacao, '') <> '' THEN '<span class=\"ComplementoAplicacao\"> ' || ComplementoAplicacao || '</span>' ELSE '' END"
+        },
+        "notfounds": {
+          "notfound1": "",
+          "notfound2": "",
+          "notfound3": ",",
+          "notfound4": "/",
+          "notfound5": "comLimitacao",
+          "notfound6": ""
+        }
+      },
+      "codmontadora": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoFabricante = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "ano": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "upper(APLICACAO.ComplementoAplicacao3_1) = upper('?')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "anocomposto": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "(((((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '____' OR (CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '*[-/.]____') AND '?' >= substr((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END), length((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END))-3)) OR (((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '__'   OR (CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '*[-/.]__')   AND '?' >= CASE WHEN (Cast(substr((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END), length((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END))-1) as integer)<=25) THEN '20' ELSE '19' END || substr((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END), length((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END))-1)) OR (Not ((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '____' OR (CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '*[-/.]____' OR (CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '__' OR (CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '*[-/.]__')) ) AND ((((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '____' OR (CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '*[-/.]____') AND '?' <= substr((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END), length((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END))-3)) OR (((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '__'   OR (CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '*[-/.]__')   AND '?' <= CASE WHEN (Cast(substr((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END), length((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END))-1) as integer)<=25) THEN '20' ELSE '19' END || substr((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END), length((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END))-1)) OR (Not ((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '____' OR (CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '*[-/.]____' OR (CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '__' OR (CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '*[-/.]__')) ))"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "estrias": {
+        "sql": "PRODUTO.CpoAuxProd3 = '?'"
+      },
+      "diametro": {
+        "sql": "PRODUTO.CpoAuxProd4 = '?'"
+      },
+      "passoDeRosca": {
+        "sql": "PRODUTO.CpoAuxProd5 = '?'"
+      },
+      "comprimento": {
+        "sql": "PRODUTO.CpoAuxProd6 = '?'"
+      },
+      "eixo": {
+        "sql": "PRODUTO.CpoAuxProd7 = '?'"
+      },
+      "alojamento": {
+        "sql": "PRODUTO.CpoAuxProd8 = '?'"
+      },
+      "altura": {
+        "sql": "PRODUTO.CpoAuxProd9 = '?'"
+      },
+      "externo": {
+        "sql": "PRODUTO.CpoAuxProd10 = '?'"
+      },
+      "haste": {
+        "sql": "PRODUTO.CpoAuxProd21 = '?'"
+      },
+      "cabeca": {
+        "sql": "PRODUTO.CpoAuxProd22 = '?'"
+      },
+      "qtdRanhuras": {
+        "sql": "PRODUTO.CpoAuxProd23 = '?'"
+      },
+      "angulo": {
+        "sql": "PRODUTO.CpoAuxProd24 = '?'"
+      },
+      "lancamento": {
+        "sql": "PRODUTO.FlagLancamento=1"
+      },
+      "promocao": {
+        "sql": "PRODUTO.FlagPromocao=1"
+      },
+      "pontaestoque": {
+        "sql": "PRODUTO.FlagPontaEstoque=1"
+      },
+      "relacionados": {
+        "sql": "PRODUTO.CodigoProduto IN (SELECT CodigoSimilar FROM SIMILAR WHERE SIMILAR.CodigoProduto = ?)"
+      },
+      "conjunto": {
+        "sql": "PRODUTO.CodigoProduto IN (SELECT CodProdComp FROM CONJ_PRODS WHERE CodProdConj = ?)",
+        "founds": {
+          "found1": "1=1"
+        },
+        "notfounds": {
+          "notfound1": "IfNull(upper(PRODUTO.CpoAuxProd11), '') NOT IN ('S', 'SIM', '1')"
+        }
+      },
+      "itemconjunto": {
+        "sql": "PRODUTO.CodigoProduto IN (SELECT CodProdConj FROM CONJ_PRODS WHERE CodProdComp = ?)"
+      }
+    },
+    "ordem": [
+      {
+        "codigo": "Conjunto DESC, PRODUTO.NumeroProduto,PRODUTO.DescricaoProduto<IDM>"
+      },
+      {
+        "produto": "Conjunto DESC, PRODUTO.DescricaoProduto<IDM>,PRODUTO.NumeroProduto"
+      },
+      {
+        "data": "Conjunto DESC, PRODUTO.DataFlagLancamento desc,PRODUTO.NumeroProduto"
+      }
+    ]
+  },
+  "item": {
+    "base": "SELECT {codTabP}#1, PRODUTO.CodigoGrupoProduto, CASE WHEN IfNull(upper(PRODUTO.CpoAuxProd1), '') IN ('X', 'SIM') THEN 1 ELSE 0 END AS ComMLS, CASE WHEN IfNull(upper(PRODUTO.CpoAuxProd2), '') IN ('X', 'SIM') THEN 1 ELSE 0 END AS ComRetentor, CpoAuxProd2, CpoAuxProd3, CpoAuxProd4, CpoAuxProd5, CpoAuxProd6, CpoAuxProd7, CpoAuxProd8, CpoAuxProd9, CpoAuxProd10, CASE WHEN IfNull(upper(PRODUTO.CpoAuxProd11), '') IN ('S', 'SIM', '1') THEN 1 ELSE 0 END AS NaoVendidoAvulso, CASE WHEN IfNull(upper(PRODUTO.CpoAuxProd11), '') IN ('S', 'SIM', '1') THEN 1 ELSE 0 END AS NaoInsereNoCarrinho, CpoAuxProd12, CpoAuxProd13, CpoAuxProd14, CpoAuxProd15, CpoAuxProd16, CpoAuxProd17, CpoAuxProd18, CpoAuxProd19, CpoAuxProd20, CpoAuxProd21, CpoAuxProd22, CpoAuxProd23, CpoAuxProd24, CpoAuxProd25, CpoAuxProd26, CpoAuxProd27, CpoAuxProd28, CpoAuxProd29, CpoAuxProd30, CpoAuxProd31, CpoAuxProd32, CpoAuxProd33,CpoAuxProd34, PRODUTO.Unidade, PRODUTO.DescricaoProduto, (SELECT FABRICANTE.DescricaoFabricante FROM FABRICANTE WHERE FABRICANTE.CodigoFabricante = PRODUTO.CodigoFabricante LIMIT 1) AS Marca, GRUPOPRODUTO.DescricaoGrupoProduto AS Grupo, SUBGRUPOPRODUTO.DescricaoSubGrupoProduto AS SubGrupo, CASE WHEN EXISTS(SELECT 1 FROM SIMILAR WHERE CodigoProduto = PRODUTO.CodigoProduto LIMIT 1) THEN 1 ELSE 0 END AS PossuiSimilar, CASE WHEN (SELECT 1 FROM CONJ_PRODS WHERE CodProdConj = PRODUTO.CodigoProduto LIMIT 1) IS NULL THEN 0 ELSE 1 END AS Conjunto, CASE WHEN (SELECT 1 FROM CONJ_PRODS WHERE CodProdComp = PRODUTO.CodigoProduto LIMIT 1) IS NULL THEN '0' ELSE '1' END AS ItemConjunto, '' AS ComponentesConjuntoTipoTres, (SELECT PRODUTO_OBS.Observacao<IDM> FROM PRODUTO_OBS WHERE PRODUTO_OBS.CodigoProduto = PRODUTO.CodigoProduto) AS Observacao, PRODUTO.CodigoProduto, PRODUTO.NumeroProduto, PRODUTO.NumeroProdutoPesq, PRODUTO.DescricaoProduto<IDM> AS DescricaoProduto, upper(PRODUTO.ArquivoFotoProduto2) AS ManualDeTorque, upper(PRODUTO.ArquivoFotoProduto) AS ArquivoFotoProduto, upper('') AS ArquivoFotoProduto2, upper('') AS ArquivoFotoProduto3, PRODUTO.FlagLancamento, PRODUTO.FlagPromocao, PRODUTO.FlagPontaEstoque, PRODUTO.DataFlagLancamento, PRODUTO.DataFlagPromocao, PRODUTO.DataFlagPontaEstoque, (SELECT CASE WHEN TemAplic = 1 OR TemFab = 1 OR TemAno = 1 OR TemMotor = 1 THEN '<table class=itemTabAplicacao>' || CASE WHEN TemAplic = 0 THEN '' ELSE '<tr class=titTabAplic><td class=\"titTabVeiculo tabVeiculo\" ng-bind-html=\"_m(''Veículo'')\"></td>' END || CASE WHEN TemMotor = 0 THEN '' ELSE '<td class=\"titTabVeiculo tabVeiculo\" ng-bind-html=\"_m(''Motor'')\"></td>' END || CASE WHEN TemAno = 0 THEN '' ELSE '<td class=\"titTabVeiculo tabVeiculo\" ng-bind-html=\"_m(''Ano'')\"></td>' END || CASE WHEN TemDetalhes = 1 THEN '<td class=\"tituloTabAplicacao colMaisDetalhes\" ng-bind-html=\"_m('''')\"></td>' ELSE '' END || '</tr>' || CASE WHEN TemAplic = 0 THEN '' ELSE '</tr>' END || Group_Concat(Aplics, '') || '</table>' ELSE '' END FROM (SELECT CASE WHEN Min(DescricaoFabricante<IDM>) IS NULL OR Min(DescricaoFabricante<IDM>) = '' THEN '' ELSE '<tr><td colspan=' || (TemAplic + TemMotor + TemAno + TemDetalhes) || ' class=\"itemMontadora itemMontadora2\">' || Min(DescricaoFabricante<IDM>) || '</td></tr>' END || Group_Concat(CpoAplic, '') AS Aplics, TemAplic, Min(ordemAplic) AS ordemAplic, TemFab, TemAno, TemMotor, TemMotor, TemDetalhes, DescricaoAplicacao<IDM> FROM ( SELECT CASE WHEN TemAplic = 1 THEN '<tr id=conteudoAplicacao' || CASE WHEN TemDetalhes = 1 THEN ' detalhes-aplicacao=\"' || APLICACAO.CodigoAplicacao || ';' || PRODUTO.CodigoProduto || '\">' ELSE '>' END ELSE '' END || CASE WHEN TemAplic = 0 THEN '' ELSE '<td class=\"conteudoVeiculoTD itemVeiculo tabVeiculo ' {aplicacaoaux}#1 {montadora}#2 {aplicacaoaux}#2 {aplicacaoaux}#4 || CASE WHEN {veiculo}#2 AND {veiculo_text}#2 AND {complementoAplicacao}#2 THEN 'itemVeiculoBold ' ELSE 'itemVeiculo ' END {aplicacaoaux}#5 {montadora}#3 {aplicacaoaux}#3 || 'itemVeiculo' \n || ' \">' || IfNull(APLICACAO.DescricaoAplicacao<IDM>, '') || '</td>' END || CASE WHEN TemMotor = 0 THEN '' ELSE '<td class=\"conteudoModeloTD itemVeiculo tabVeiculo ' {aplicacaoaux}#1 {montadora}#2 {aplicacaoaux}#2 {aplicacaoaux}#4 || CASE WHEN {veiculo}#2 AND {veiculo_text}#2 AND {ano}#2 AND {motor}#2 THEN 'itemVeiculoBold ' ELSE 'itemVeiculo ' END {aplicacaoaux}#5 {montadora}#3 {aplicacaoaux}#3 || 'itemVeiculo' \n || ' \">' || IfNull(APLICACAO.ComplementoAplicacao, '') || '</td>' END || CASE WHEN TemAno = 0 THEN '' ELSE '<td class=\"conteudoModeloTD itemVeiculo tabVeiculo ' {aplicacaoaux}#1 {montadora}#2 {aplicacaoaux}#2 {aplicacaoaux}#4 || CASE WHEN {veiculo}#2 AND {veiculo_text}#2 AND {ano}#2 AND {motor}#2 THEN 'itemVeiculoBold ' ELSE 'itemVeiculo ' END {aplicacaoaux}#5 {montadora}#3 {aplicacaoaux}#3 || 'itemVeiculo' \n || ' \">' || IfNull(APLICACAO.ComplementoAplicacao2, '') || '</td>' END || CASE WHEN TemDetalhes = 1 THEN '<td class=colMaisDetalhes><i class=\"icon\"></i></td></tr><tr class=\"borderRow\"></tr>' ELSE '' END || CASE WHEN TemAplic = 1 THEN '</tr>' ELSE '' END AS CpoAplic, TemFab, TemAno, TemMotor, TemMotor, TemDetalhes, APLICACAO.CodigoFabricante, FABRICANTE.DescricaoFabricante<IDM>, TemAplic, CASE WHEN {veiculo}#3 AND {veiculo_text}#3 AND {complementoAplicacao}#3 THEN 0 ELSE 1 END as ordemAplic, APLICACAO.CodigoAplicacao, APLICACAO.DescricaoAplicacao<IDM> FROM PRODUTO_APLICACAO INNER JOIN APLICACAO ON PRODUTO_APLICACAO.CodigoAplicacao = APLICACAO.CodigoAplicacao LEFT JOIN FABRICANTE ON APLICACAO.CodigoFabricante = FABRICANTE.CodigoFabricante INNER JOIN ( SELECT PRODUTO_APLICACAO.CodigoProduto, CASE WHEN Max(IfNull(APLICACAO.DescricaoAplicacao<IDM>, '')) = '' THEN 0 ELSE 1 END AS TemAplic, CASE WHEN Max(IfNull(APLICACAO.CodigoFabricante, '')) = '' THEN 0 ELSE 1 END AS TemFab, CASE WHEN Max(IfNull(APLICACAO.ComplementoAplicacao2, '')) = '' THEN 0 ELSE 1 END AS TemAno, CASE WHEN Max(IfNull(APLICACAO.ComplementoAplicacao, '')) = '' THEN 0 ELSE 1 END AS TemMotor, CASE WHEN Max(IfNull(APLICACAO.ComplementoAplicacao3, '')) = '' THEN 0 ELSE 1 END AS TemDetalhes, APLICACAO.CodigoFabricante FROM PRODUTO_APLICACAO INNER JOIN APLICACAO ON PRODUTO_APLICACAO.CodigoAplicacao = APLICACAO.CodigoAplicacao LEFT JOIN FABRICANTE ON APLICACAO.CodigoFabricante = FABRICANTE.CodigoFabricante WHERE PRODUTO_APLICACAO.CodigoProduto = PRODUTO.CodigoProduto GROUP BY PRODUTO_APLICACAO.CodigoProduto) AS TEMAPL ON TEMAPL.CodigoProduto = PRODUTO_APLICACAO.CodigoProduto WHERE PRODUTO_APLICACAO.CodigoProduto = PRODUTO.CodigoProduto /* APLICACAO.DescricaoAplicacao<IDM> <> PRODUTO.DescricaoProduto<IDM> está condição foi utilizada porque a maioria das aplicações é igual a descrição do produto */ AND APLICACAO.DescricaoAplicacao<IDM> <> PRODUTO.DescricaoProduto<IDM> ORDER BY CASE WHEN {veiculo}#1 AND {veiculo_text}#1 AND {complementoAplicacao}#1 THEN 0 ELSE 1 END, CASE WHEN {veiculo}#1 AND {veiculo_text}#1 AND {complementoAplicacao}#1 THEN 0 ELSE 1 END, APLICACAO.CodigoFabricante, APLICACAO.DescricaoAplicacao<IDM>) GROUP BY CodigoFabricante ORDER BY  {montadora}#1 ordemAplic, DescricaoFabricante<IDM>)) AS DescricaoAplicacao, (SELECT '<table class=itemTabNumero>' || Group_Concat(CpoNro, '') || '</table>' FROM (SELECT '<tr class=trItemFabricanteNro><td class=itemFabricanteNro>' || DescricaoFabricante<IDM> || '</td></tr>' || group_concat('<tr><td {codigo}#2>' || NumeroProduto || '</td></tr>','') AS CpoNro, DescricaoFabricante<IDM>, NumeroProduto, {codigo}#3 AS ordemNum FROM ( SELECT REFERENCIACRUZADA.NumeroProdutoPesq, REFERENCIACRUZADA.NumeroProduto, REFERENCIACRUZADA.CodigoFabricante, FABRICANTE.DescricaoFabricante<IDM> FROM REFERENCIACRUZADA INNER JOIN FABRICANTE ON REFERENCIACRUZADA.CodigoFabricante = FABRICANTE.CodigoFabricante WHERE REFERENCIACRUZADA.CodigoProduto = PRODUTO.CodigoProduto ORDER BY {codigo}#1 FABRICANTE.DescricaoFabricante<IDM>, REFERENCIACRUZADA.NumeroProduto) GROUP BY CodigoFabricante ORDER BY ordemNum, DescricaoFabricante<IDM>, NumeroProduto )) AS NumeroOriginal2 FROM PRODUTO LEFT JOIN FIGURA_ITENS ON PRODUTO.CodigoProduto = FIGURA_ITENS.CodigoProduto LEFT JOIN FIGURA ON FIGURA_ITENS.CodigoFigura = FIGURA.CodigoFigura LEFT JOIN GRUPOPRODUTO ON PRODUTO.CodigoGrupoProduto = GRUPOPRODUTO.CodigoGrupoProduto LEFT JOIN SUBGRUPOPRODUTO ON PRODUTO.CodigoSubGrupoProduto = SUBGRUPOPRODUTO.CodigoSubGrupoProduto WHERE 1 = 1",
+    "filtro": {
+      "CodigoProduto": {
+        "sql": "PRODUTO.CodigoProduto=?"
+      },
+      "NumeroProdutoPesq": {
+        "sql": "PRODUTO.NumeroProdutoPesq='?'",
+        "tipo": "codigo"
+      },
+      "codigo": {
+        "sql": "1=1",
+        "tipo": "codigo",
+        "founds": {
+          "found1": "CASE WHEN IfNull(upper(REFERENCIACRUZADA.NumeroProdutoPesq), '') GLOB upper('*?*') THEN 0 ELSE 1 END,",
+          "found2": "' || CASE WHEN IfNull(upper(NumeroProdutoPesq), '') GLOB upper('*?*') THEN 'class=boldNaConsulta' ELSE '' END || '",
+          "found3": "min(CASE WHEN IfNull(upper(NumeroProdutoPesq), '') GLOB upper('*?*') THEN 0 ELSE 1 END)"
+        },
+        "notfounds": {
+          "notfound1": "",
+          "notfound2": "",
+          "notfound3": "1=1"
+        }
+      },
+      "codTabP": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "replace(printf('%.2f', (SELECT PI FROM TABPI WHERE TABPI.CodigoProduto = PRODUTO.CodigoProduto AND TABPI.CodigoTabP='?')), '.', ',') AS Preco"
+        },
+        "notfounds": {
+          "notfound1": "PRODUTO.PrecoProduto AS Preco"
+        }
+      },
+      "veiculo": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "upper(IfNull(APLICACAO.DescricaoAplicacao<IDM>, '')) = upper('?')",
+          "found2": "upper(IfNull(APLICACAO.DescricaoAplicacao<IDM>, '')) = upper('?')",
+          "found3": "upper(IfNull(DescricaoAplicacao<IDM>, '')) = upper('?')"
+        },
+        "notfounds": {
+          "notfound1": "1=1",
+          "notfound2": "1=1",
+          "notfound3": "1=1"
+        }
+      },
+      "veiculo_text": {
+        "sql": "1=1",
+        "tipo": "aplicacao",
+        "founds": {
+          "found1": "upper(IfNull(APLICACAO.DescricaoAplicacao<IDM>, '')) GLOB upper('*?*')",
+          "found2": "upper(IfNull(APLICACAO.DescricaoAplicacao<IDM>, '')) GLOB upper('*?*')",
+          "found3": "upper(IfNull(DescricaoAplicacao<IDM>, '')) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1",
+          "notfound2": "1=1",
+          "notfound3": "1=1"
+        }
+      },
+      "complementoAplicacao": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "upper(IfNull(APLICACAO.ComplementoAplicacao, '')) = upper('?')",
+          "found2": "upper(IfNull(APLICACAO.ComplementoAplicacao, '')) = upper('?')",
+          "found3": "upper(IfNull(ComplementoAplicacao, '')) = upper('?')"
+        },
+        "notfounds": {
+          "notfound1": "1=1",
+          "notfound2": "1=1",
+          "notfound3": "1=1"
+        }
+      },
+      "motor": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "upper(IfNull(APLICACAO.ComplementoAplicacao, '')) = upper('?')",
+          "found2": "upper(IfNull(APLICACAO.ComplementoAplicacao, '')) = upper('?')",
+          "found3": "upper(IfNull(ComplementoAplicacao, '')) = upper('?')"
+        },
+        "notfounds": {
+          "notfound1": "1=1",
+          "notfound2": "1=1",
+          "notfound3": "1=1"
+        }
+      },
+      "ano": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "upper(IfNull(APLICACAO.ComplementoAplicacao2, '')) = upper('?')",
+          "found2": "upper(IfNull(APLICACAO.ComplementoAplicacao2, '')) = upper('?')",
+          "found3": "upper(IfNull(ComplementoAplicacao2, '')) = upper('?')"
+        },
+        "notfounds": {
+          "notfound1": "1=1",
+          "notfound2": "1=1",
+          "notfound3": "1=1"
+        }
+      },
+      "anocomposto": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "(((((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '____' OR (CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '*[-/.]____') AND '?' >= substr((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END), length((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END))-3)) OR (((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '__'   OR (CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '*[-/.]__')   AND '?' >= CASE WHEN (Cast(substr((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END), length((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END))-1) as integer)<=25) THEN '20' ELSE '19' END || substr((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END), length((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END))-1)) OR (Not ((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '____' OR (CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '*[-/.]____' OR (CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '__' OR (CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '*[-/.]__')) ) AND ((((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '____' OR (CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '*[-/.]____') AND '?' <= substr((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END), length((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END))-3)) OR (((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '__'   OR (CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '*[-/.]__')   AND '?' <= CASE WHEN (Cast(substr((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END), length((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END))-1) as integer)<=25) THEN '20' ELSE '19' END || substr((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END), length((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END))-1)) OR (Not ((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '____' OR (CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '*[-/.]____' OR (CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '__' OR (CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '*[-/.]__')) ))",
+          "found2": "(((((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '____' OR (CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '*[-/.]____') AND '?' >= substr((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END), length((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END))-3)) OR (((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '__'   OR (CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '*[-/.]__')   AND '?' >= CASE WHEN (Cast(substr((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END), length((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END))-1) as integer)<=25) THEN '20' ELSE '19' END || substr((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END), length((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END))-1)) OR (Not ((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '____' OR (CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '*[-/.]____' OR (CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '__' OR (CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '*[-/.]__')) ) AND ((((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '____' OR (CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '*[-/.]____') AND '?' <= substr((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END), length((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END))-3)) OR (((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '__'   OR (CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '*[-/.]__')   AND '?' <= CASE WHEN (Cast(substr((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END), length((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END))-1) as integer)<=25) THEN '20' ELSE '19' END || substr((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END), length((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END))-1)) OR (Not ((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '____' OR (CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '*[-/.]____' OR (CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '__' OR (CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '*[-/.]__')) ))",
+          "found3": "(((((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '____' OR (CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '*[-/.]____') AND '?' >= substr((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END), length((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END))-3)) OR (((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '__'   OR (CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '*[-/.]__')   AND '?' >= CASE WHEN (Cast(substr((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END), length((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END))-1) as integer)<=25) THEN '20' ELSE '19' END || substr((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END), length((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END))-1)) OR (Not ((CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '____' OR (CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '*[-/.]____' OR (CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '__' OR (CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END) LIKE '*[-/.]__')) ) AND ((((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '____' OR (CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '*[-/.]____') AND '?' <= substr((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END), length((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END))-3)) OR (((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '__'   OR (CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '*[-/.]__')   AND '?' <= CASE WHEN (Cast(substr((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END), length((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END))-1) as integer)<=25) THEN '20' ELSE '19' END || substr((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END), length((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END))-1)) OR (Not ((CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '____' OR (CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '*[-/.]____' OR (CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '__' OR (CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END) LIKE '*[-/.]__')) ))"
+        },
+        "notfounds": {
+          "notfound1": "1=1",
+          "notfound2": "1=1",
+          "notfound3": "1=1"
+        }
+      },
+      "aplicacaoaux": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "/*",
+          "found2": "*/",
+          "found3": "--",
+          "found4": "",
+          "found5": ""
+        },
+        "notfounds": {
+          "notfound1": "",
+          "notfound2": "",
+          "notfound3": "",
+          "notfound4": "/*",
+          "notfound5": "*/"
+        }
+      },
+      "montadora": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "CASE WHEN IfNull(DescricaoFabricante<IDM>, '') = '?' THEN 0 ELSE 1 END,",
+          "found2": "|| CASE WHEN IfNull(FABRICANTE.DescricaoFabricante<IDM>, '') = '?' THEN 'itemVeiculoBold' ELSE 'itemVeiculo ' END",
+          "found3": "--"
+        },
+        "notfounds": {
+          "notfound1": "",
+          "notfound2": "",
+          "notfound3": ""
+        }
+      }
+    },
+    "ordem": []
+  },
+  "imagemP": {
+    "base": "SELECT DISTINCT upper(ArquivoFoto) AS ArquivoFoto, URIP FROM FOTOS WHERE IfNull(URIP, '') <> ''",
+    "filtro": {
+      "ArquivoFoto": {
+        "sql": "ArquivoFoto IN (?)",
+        "tipo": "dados"
+      }
+    },
+    "ordem": [
+      {
+        "ArquivoFoto": "ArquivoFoto"
+      }
+    ],
+    "db": "m02.db"
+  },
+  "imagemG": {
+    "base": "SELECT DISTINCT ArquivoFoto, URIG FROM FOTOS WHERE IfNull(URIG, '') <> ''",
+    "filtro": {
+      "ArquivoFoto": {
+        "sql": "ArquivoFoto IN (?)",
+        "tipo": "dados"
+      },
+      "Pasta": {
+        "sql": "Pasta='?'"
+      }
+    },
+    "ordem": [
+      {
+        "ArquivoFoto": "1"
+      }
+    ],
+    "db": "m02.db"
+  },
+  "relacaoaplicacao": {
+    "base": "SELECT DISTINCT upper(PRODUTO.ArquivoFotoProduto) AS ArquivoFotoProduto, upper(PRODUTO.ArquivoFotoProduto2) AS ArquivoFotoProduto2, upper('') AS ArquivoFotoProduto3, PRODUTO.CodigoProduto, PRODUTO.DescricaoProduto<IDM> AS DescricaoProduto,PRODUTO.NumeroProduto, PRODUTO.NumeroProdutoPesq FROM PRODUTO INNER JOIN PRODUTO_APLICACAO ON PRODUTO.CodigoProduto = PRODUTO_APLICACAO.CodigoProduto INNER JOIN APLICACAO ON PRODUTO_APLICACAO.CodigoAplicacao = APLICACAO.CodigoAplicacao WHERE 1=1",
+    "filtro": {
+      "codigoProduto": {
+        "sql": "PRODUTO.CodigoProduto <> ?"
+      },
+      "DescricaoAplicacao": {
+        "sql": "IfNull(APLICACAO.DescricaoAplicacao<IDM>, '') = '?'"
+      },
+      "CodigoFabricante": {
+        "sql": "IfNull(APLICACAO.CodigoFabricante, '') = ?"
+      },
+      "CodigoTipoAplicacao": {
+        "sql": "IfNull(APLICACAO.CodigoTipoAplicacao, '') = ?"
+      },
+      "ComplementoAplicacao": {
+        "sql": "IfNull(APLICACAO.ComplementoAplicacao<IDM>, '') = '?'"
+      },
+      "ComplementoAplicacao2": {
+        "sql": "IfNull(APLICACAO.ComplementoAplicacao2, '') = '?'"
+      },
+      "ComplementoAplicacao3_1": {
+        "sql": "IfNull(APLICACAO.ComplementoAplicacao3_1, '') = '?'"
+      },
+      "ComplementoAplicacao3_2": {
+        "sql": "IfNull(APLICACAO.ComplementoAplicacao3_2, '') = '?'"
+      },
+      "ComplementoAplicacao3_3": {
+        "sql": "IfNull(APLICACAO.ComplementoAplicacao3_3, '') = '?'"
+      },
+      "ComplementoAplicacao3_4": {
+        "sql": "IfNull(APLICACAO.ComplementoAplicacao3_4, '') = '?'"
+      },
+      "ComplementoAplicacao3_5": {
+        "sql": "IfNull(APLICACAO.ComplementoAplicacao3_5, '') = '?'"
+      },
+      "ComplementoAplicacao3_6": {
+        "sql": "IfNull(APLICACAO.ComplementoAplicacao3_6, '') = '?'"
+      }
+    },
+    "ordem": [
+      {
+        "descricao": "PRODUTO.DescricaoProduto, PRODUTO.NumeroProduto"
+      }
+    ]
+  },
+  "umaaplicacao": {
+    "base": "SELECT * FROM (SELECT APLICACAO.CodigoAplicacao, APLICACAO.DescricaoAplicacao<IDM> AS DescricaoAplicacao, APLICACAO.CodigoFabricante, FABRICANTE.DescricaoFabricante<IDM> AS DescricaoFabricante, APLICACAO.CodigoTipoAplicacao, (SELECT TIPOAPLICACAO.DescricaoTipoAplicacao<IDM> FROM TIPOAPLICACAO WHERE TIPOAPLICACAO.CodigoTipoAplicacao = APLICACAO.CodigoTipoAplicacao) AS DescricaoTipoAplicacao, ComplementoAplicacao, ComplementoAplicacao2, ComplementoAplicacao3, (SELECT DescricaoProduto<IDM> FROM PRODUTO WHERE {codigoProduto}#1 LIMIT 1) AS DescricaoProduto FROM APLICACAO INNER JOIN FABRICANTE ON APLICACAO.CodigoFabricante = FABRICANTE.CodigoFabricante WHERE {codigoAplicacao}#1 ) WHERE 1=1",
+    "filtro": {
+      "codigoAplicacao": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoAplicacao = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codigoProduto": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.CodigoProduto = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      }
+    },
+    "ordem": [
+      {
+        "descricao": "1"
+      }
+    ]
+  },
+  "montadora": {
+    "base": "SELECT DISTINCT FABRICANTE.DescricaoFabricante<IDM> AS Descricao, FABRICANTE.CodigoFabricante AS Codigo FROM FABRICANTE WHERE EXISTS (SELECT 1 FROM APLICACAO LEFT JOIN PRODUTO_APLICACAO ON APLICACAO.CodigoAplicacao = PRODUTO_APLICACAO.CodigoAplicacao INNER JOIN PRODUTO ON PRODUTO_APLICACAO.CodigoProduto = PRODUTO.CodigoProduto WHERE FABRICANTE.CodigoFabricante = APLICACAO.CodigoFabricante AND {codgrupo}#1 AND {codfabricante}#1 AND {codsubgrupo}#1 AND {linha}#1 AND {codtipoaplicacao}#1 AND {checkbox_tipoaplicacao_1}#1 AND {checkbox_tipoaplicacao_2}#1 AND {checkbox_tipoaplicacao_3}#1 AND {produto}#1 AND {produto_text}#1 AND IfNull(upper(PRODUTO.CpoAuxProd11), '') NOT IN ('S', 'SIM', '1')) AND FABRICANTE.FlagAplicacao = 1",
+    "filtro": {
+      "montadora": {
+        "sql": "upper(FABRICANTE.DescricaoFabricante<IDM>) GLOB upper('*?*')"
+      },
+      "codgrupo": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.CodigoGrupoProduto = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codsubgrupo": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.CodigoSubGrupoProduto = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "linha": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.CodigoGrupoProduto = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codtipoaplicacao": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoTipoAplicacao = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "checkbox_tipoaplicacao_1": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoTipoAplicacao = 1"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "checkbox_tipoaplicacao_2": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoTipoAplicacao = 2"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "checkbox_tipoaplicacao_3": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoTipoAplicacao = 3"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codfabricante": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.CodigoFabricante = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "produto": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.DescricaoProduto<IDM> = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "produto_text": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "upper(PRODUTO.DescricaoProduto<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      }
+    },
+    "ordem": [
+      {
+        "Descricao": "Descricao"
+      }
+    ]
+  },
+  "fabricante": {
+    "base": "SELECT DISTINCT FABRICANTE.DescricaoFabricante<IDM> AS Descricao, FABRICANTE.CodigoFabricante AS Codigo FROM FABRICANTE WHERE EXISTS (SELECT 1 FROM PRODUTO LEFT JOIN PRODUTO_APLICACAO ON PRODUTO_APLICACAO.CodigoProduto = PRODUTO.CodigoProduto LEFT JOIN APLICACAO ON APLICACAO.CodigoAplicacao = PRODUTO_APLICACAO.CodigoAplicacao WHERE FABRICANTE.CodigoFabricante = PRODUTO.CodigoFabricante AND {codgrupo}#1 AND {codsubgrupo}#1 AND {linha}#1 AND {codtipoaplicacao}#1 AND {codmontadora}#1 AND {produto}#1 AND {veiculo_text}#1 AND {veiculo}#1 AND {complementoAplicacao}#1 AND {produto_text}#1 ) AND FABRICANTE.FlagProduto = 1",
+    "filtro": {
+      "fabricante": {
+        "sql": "upper(FABRICANTE.DescricaoFabricante<IDM>) GLOB upper('*?*')"
+      },
+      "codgrupo": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.CodigoGrupoProduto = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codsubgrupo": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.CodigoSubGrupoProduto = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "linha": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.CodigoGrupoProduto = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "veiculo": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.DescricaoAplicacao<IDM> = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "veiculo_text": {
+        "sql": "1=1",
+        "tipo": "aplicacao",
+        "founds": {
+          "found1": "Upper(DescricaoAplicacao<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "complementoAplicacao": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.ComplementoAplicacao = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codtipoaplicacao": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoTipoAplicacao = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codmontadora": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoFabricante = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "produto": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.DescricaoProduto<IDM> = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "produto_text": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "upper(PRODUTO.DescricaoProduto<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      }
+    },
+    "ordem": [
+      {
+        "Descricao": "Descricao"
+      }
+    ]
+  },
+  "tipoaplicacao": {
+    "base": "SELECT DISTINCT CASE WHEN TIPOAPLICACAO.DescricaoTipoAplicacao<IDM> = 'Utilitários' THEN 'Linha Utilitários' ELSE TIPOAPLICACAO.DescricaoTipoAplicacao<IDM> END AS Descricao, TIPOAPLICACAO.CodigoTipoAplicacao AS Codigo FROM APLICACAO INNER JOIN TIPOAPLICACAO ON APLICACAO.CodigoTipoAplicacao = TIPOAPLICACAO.CodigoTipoAplicacao WHERE EXISTS ( SELECT 1 FROM PRODUTO INNER JOIN PRODUTO_APLICACAO ON PRODUTO_APLICACAO.CodigoProduto = PRODUTO.CodigoProduto WHERE PRODUTO_APLICACAO.CodigoAplicacao = APLICACAO.CodigoAplicacao AND {linha}#1 AND IfNull(upper(PRODUTO.CpoAuxProd11), '') NOT IN ('S', 'SIM', '1')) AND IfNull(APLICACAO.DescricaoAplicacao<IDM>, '') <> ''",
+    "filtro": {
+      "tipoaplicacao": {
+        "sql": "upper(TIPOAPLICACAO.DescricaoTipoAplicacao<IDM>) GLOB upper('*?*')"
+      },
+      "linha": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.CodigoGrupoProduto = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      }
+    },
+    "ordem": [
+      {
+        "Descricao": "Descricao"
+      }
+    ]
+  },
+  "veiculo": {
+    "base": "SELECT DISTINCT FABRICANTE.DescricaoFabricante<IDM> AS Fabricante, APLICACAO.DescricaoAplicacao<IDM> AS Descricao FROM APLICACAO INNER JOIN FABRICANTE ON APLICACAO.CodigoFabricante = FABRICANTE.CodigoFabricante WHERE EXISTS ( SELECT 1 FROM PRODUTO INNER JOIN PRODUTO_APLICACAO ON PRODUTO_APLICACAO.CodigoProduto = PRODUTO.CodigoProduto WHERE PRODUTO_APLICACAO.CodigoAplicacao = APLICACAO.CodigoAplicacao AND {codgrupo}#1 AND {codfabricante}#1 AND {codsubgrupo}#1 AND {linha}#1 AND {produto}#1 AND {produto_text}#1 AND IfNull(upper(PRODUTO.CpoAuxProd11), '') NOT IN ('S', 'SIM', '1')) AND IfNull(APLICACAO.DescricaoAplicacao<IDM>, '') <> ''",
+    "filtro": {
+      "veiculo": {
+        "sql": "upper(APLICACAO.DescricaoAplicacao<IDM>) GLOB upper('*?*')"
+      },
+      "codmontadora": {
+        "sql": "APLICACAO.CodigoFabricante = '?'"
+      },
+      "codfabricante": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.CodigoFabricante = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codgrupo": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.CodigoGrupoProduto = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codsubgrupo": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.CodigoSubGrupoProduto = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "linha": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.CodigoGrupoProduto = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codtipoaplicacao": {
+        "sql": "APLICACAO.CodigoTipoAplicacao = ?"
+      },
+      "checkbox_tipoaplicacao_1": {
+        "sql": "APLICACAO.CodigoTipoAplicacao = 1"
+      },
+      "checkbox_tipoaplicacao_2": {
+        "sql": "APLICACAO.CodigoTipoAplicacao = 2"
+      },
+      "checkbox_tipoaplicacao_3": {
+        "sql": "APLICACAO.CodigoTipoAplicacao = 3"
+      },
+      "produto": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.DescricaoProduto<IDM> = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "produto_text": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "upper(PRODUTO.DescricaoProduto<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      }
+    },
+    "ordem": [
+      {
+        "Descricao": "Descricao"
+      }
+    ]
+  },
+  "complementoAplicacao": {
+    "base": "SELECT DISTINCT APLICACAO.ComplementoAplicacao AS Descricao FROM APLICACAO WHERE EXISTS ( SELECT 1 FROM PRODUTO INNER JOIN PRODUTO_APLICACAO ON PRODUTO_APLICACAO.CodigoProduto = PRODUTO.CodigoProduto WHERE PRODUTO_APLICACAO.CodigoAplicacao = APLICACAO.CodigoAplicacao AND {codgrupo}#1 AND {codsubgrupo}#1 AND {linha}#1 AND {produto}#1 AND {produto_text}#1 AND {fabricante}#1) AND IfNull(APLICACAO.ComplementoAplicacao, '') <> ''",
+    "filtro": {
+      "complementoAplicacao": {
+        "sql": "upper(Descricao) GLOB upper('*?*')"
+      },
+      "codmontadora": {
+        "sql": "APLICACAO.CodigoFabricante = '?'"
+      },
+      "codgrupo": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.CodigoGrupoProduto = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codsubgrupo": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.CodigoSubGrupoProduto = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "linha": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.CodigoGrupoProduto = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codtipoaplicacao": {
+        "sql": "APLICACAO.CodigoTipoAplicacao = ?"
+      },
+      "checkbox_tipoaplicacao_1": {
+        "sql": "APLICACAO.CodigoTipoAplicacao = 1"
+      },
+      "checkbox_tipoaplicacao_2": {
+        "sql": "APLICACAO.CodigoTipoAplicacao = 2"
+      },
+      "checkbox_tipoaplicacao_3": {
+        "sql": "APLICACAO.CodigoTipoAplicacao = 3"
+      },
+      "veiculo": {
+        "sql": "upper(APLICACAO.DescricaoAplicacao) = upper('?')"
+      },
+      "produto": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.DescricaoProduto<IDM> = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "produto_text": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "upper(PRODUTO.DescricaoProduto<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "fabricante": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.CodigoFabricante = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      }
+    },
+    "ordem": [
+      {
+        "Descricao": "Descricao"
+      }
+    ]
+  },
+  "produto": {
+    "base": "SELECT DISTINCT PRODUTO.DescricaoProduto<IDM> AS Descricao, PRODUTO.CodigoGrupoProduto AS Codigo FROM PRODUTO WHERE EXISTS ( SELECT 1 FROM PRODUTO AS AUXPROD LEFT JOIN PRODUTO_APLICACAO ON AUXPROD.CodigoProduto = PRODUTO_APLICACAO.CodigoProduto LEFT JOIN APLICACAO ON PRODUTO_APLICACAO.CodigoAplicacao = APLICACAO.CodigoAplicacao WHERE AUXPROD.CodigoProduto = PRODUTO.CodigoProduto AND {codmontadora}#1 AND {veiculo}#1 AND {complementoAplicacao}#1 AND {veiculo_text}#1 AND {codtipoaplicacao}#1) AND {produto}#1 AND IfNull(upper(PRODUTO.CpoAuxProd11), '') NOT IN ('S', 'SIM', '1')",
+    "filtro": {
+      "produto": {
+        "sql": "1=1",
+        "tipo": "conjuntopalavra",
+        "founds": {
+          "found1": "Upper(DescricaoProduto<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codmontadora": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoFabricante = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "veiculo": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.DescricaoAplicacao<IDM> = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "veiculo_text": {
+        "sql": "1=1",
+        "tipo": "aplicacao",
+        "founds": {
+          "found1": "Upper(DescricaoAplicacao<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "complementoAplicacao": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.ComplementoAplicacao = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "linha": {
+        "sql": "PRODUTO.CodigoGrupoProduto = ?"
+      },
+      "codgrupo": {
+        "sql": "PRODUTO.CodigoGrupoProduto = ?"
+      },
+      "codsubgrupo": {
+        "sql": "PRODUTO.CodigoSubGrupoProduto = ?"
+      },
+      "codfabricante": {
+        "sql": "PRODUTO.CodigoFabricante = ?"
+      },
+      "codtipoaplicacao": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoTipoAplicacao = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      }
+    },
+    "ordem": [
+      {
+        "Descricao": "Descricao"
+      }
+    ]
+  },
+  "grupo": {
+    "base": "SELECT DISTINCT GRUPOPRODUTO.DescricaoGrupoProduto AS Descricao, GRUPOPRODUTO.CodigoGrupoProduto AS Codigo FROM GRUPOPRODUTO WHERE EXISTS( SELECT 1 FROM PRODUTO LEFT JOIN PRODUTO_APLICACAO ON PRODUTO.CodigoProduto = PRODUTO_APLICACAO.CodigoProduto LEFT JOIN APLICACAO ON PRODUTO_APLICACAO.CodigoAplicacao = APLICACAO.CodigoAplicacao LEFT JOIN FABRICANTE ON APLICACAO.CodigoFabricante = FABRICANTE.CodigoFabricante WHERE PRODUTO.CodigoGrupoProduto = GRUPOPRODUTO.CodigoGrupoProduto AND {codmontadora}#1 AND {veiculo}#1 AND {complementoAplicacao}#1 AND {veiculo_text}#1 AND {linha}#1 AND {codfabricante}#1 AND {codtipoaplicacao}#1 AND {checkbox_tipoaplicacao_1}#1 AND {checkbox_tipoaplicacao_2}#1 AND {checkbox_tipoaplicacao_3}#1 AND {produto}#1 AND {produto_text}#1 AND IfNull(upper(PRODUTO.CpoAuxProd11), '') NOT IN ('S', 'SIM', '1')) AND {grupo}#1",
+    "filtro": {
+      "grupo": {
+        "sql": "1=1",
+        "tipo": "conjuntopalavra",
+        "founds": {
+          "found1": "Upper(DescricaoGrupoProduto<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codmontadora": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoFabricante = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "veiculo": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.DescricaoAplicacao<IDM> = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "veiculo_text": {
+        "sql": "1=1",
+        "tipo": "aplicacao",
+        "founds": {
+          "found1": "Upper(APLICACAO.DescricaoAplicacao<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "complementoAplicacao": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.ComplementoAplicacao = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "linha": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.CodigoGrupoProduto = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codfabricante": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.CodigoFabricante = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codtipoaplicacao": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoTipoAplicacao = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "checkbox_tipoaplicacao_1": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoTipoAplicacao = 1"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "checkbox_tipoaplicacao_2": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoTipoAplicacao = 2"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "checkbox_tipoaplicacao_3": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoTipoAplicacao = 3"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "produto": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.DescricaoProduto<IDM> = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "produto_text": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "upper(PRODUTO.DescricaoProduto<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "ComplementoAplicacao": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.ComplementoAplicacao = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      }
+    },
+    "ordem": [
+      {
+        "Descricao": "Descricao"
+      }
+    ]
+  },
+  "subgrupo": {
+    "base": "SELECT DISTINCT SUBGRUPOPRODUTO.DescricaoSubGrupoProduto AS Descricao, SUBGRUPOPRODUTO.CodigoSubGrupoProduto AS Codigo FROM SUBGRUPOPRODUTO WHERE EXISTS( SELECT 1 FROM PRODUTO LEFT JOIN PRODUTO_APLICACAO ON PRODUTO.CodigoProduto = PRODUTO_APLICACAO.CodigoProduto LEFT JOIN APLICACAO ON PRODUTO_APLICACAO.CodigoAplicacao = APLICACAO.CodigoAplicacao LEFT JOIN FABRICANTE ON APLICACAO.CodigoFabricante = FABRICANTE.CodigoFabricante WHERE PRODUTO.CodigoSubGrupoProduto = SUBGRUPOPRODUTO.CodigoSubGrupoProduto AND {codmontadora}#1 AND {veiculo}#1 AND {complementoAplicacao}#1 AND {veiculo_text}#1 AND {linha}#1 AND {codgrupo}#1 AND {codfabricante}#1 AND {codtipoaplicacao}#1 AND {checkbox_tipoaplicacao_1}#1 AND {checkbox_tipoaplicacao_2}#1 AND {checkbox_tipoaplicacao_3}#1 AND {produto}#1 AND {produto_text}#1) AND {subgrupo}#1",
+    "filtro": {
+      "subgrupo": {
+        "sql": "1=1",
+        "tipo": "conjuntopalavra",
+        "founds": {
+          "found1": "Upper(DescricaoSubGrupoProduto<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codmontadora": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoFabricante = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "veiculo": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.DescricaoAplicacao<IDM> = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "veiculo_text": {
+        "sql": "1=1",
+        "tipo": "aplicacao",
+        "founds": {
+          "found1": "Upper(APLICACAO.DescricaoAplicacao<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "complementoAplicacao": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.ComplementoAplicacao = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codgrupo": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.CodigoGrupoProduto = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "linha": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.CodigoGrupoProduto = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codfabricante": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.CodigoFabricante = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codtipoaplicacao": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoTipoAplicacao = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "checkbox_tipoaplicacao_1": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoTipoAplicacao = 1"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "checkbox_tipoaplicacao_2": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoTipoAplicacao = 2"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "checkbox_tipoaplicacao_3": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoTipoAplicacao = 3"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "produto": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.DescricaoProduto<IDM> = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "produto_text": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "upper(PRODUTO.DescricaoProduto<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      }
+    },
+    "ordem": [
+      {
+        "Descricao": "Descricao"
+      }
+    ]
+  },
+  "anocomposto": {
+    "base": "SELECT Min( case when {min}#3{max}#3 LIKE '__' OR {min}#3{max}#3 LIKE '*[-/.]__' then case when Cast(substr({min}#3{max}#3, length({min}#3{max}#3)-1) AS integer) <=25 then '20' else '19' end || substr({min}#3{max}#3, length({min}#3{max}#3)-1) else substr({min}#3{max}#3, length({min}#3{max}#3)-3) end ) AS DescricaoMin, Max( case when {min}#3{max}#3 LIKE '__' OR {min}#3{max}#3 LIKE '*[-/.]__' then case when Cast(substr({min}#3{max}#3, length({min}#3{max}#3)-1) AS integer) <=25 then '20' else '19' end || substr({min}#3{max}#3, length({min}#3{max}#3)-1) else substr({min}#3{max}#3, length({min}#3{max}#3)-3) end ) AS DescricaoMax FROM APLICACAO WHERE EXISTS (SELECT 1 FROM PRODUTO INNER JOIN PRODUTO_APLICACAO ON PRODUTO.CodigoProduto = PRODUTO_APLICACAO.CodigoProduto WHERE PRODUTO_APLICACAO.CodigoAplicacao = APLICACAO.CodigoAplicacao AND {linha}#1 AND {codgrupo}#1 AND {codsubgrupo}#1 AND ({min}#3{max}#3 LIKE '____' OR {min}#3{max}#3 LIKE '*[-/.]____' OR {min}#3{max}#3 LIKE '__' OR {min}#3{max}#3 LIKE '*[-/.]__')) AND IfNull(APLICACAO.DescricaoAplicacao<IDM>, '') <> '' AND {anocomposto}#1",
+    "filtro": {
+      "anocomposto": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "Upper(Descricao) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "min": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "Min",
+          "found2": "3_1",
+          "found3": "(CASE WHEN IfNull(ComplementoAplicacao3_1, '') IN ('','-','...','TODOS', '>', '<') THEN 1960 ELSE ComplementoAplicacao3_1 END)"
+        },
+        "notfounds": {
+          "notfound1": "",
+          "notfound2": "",
+          "notfound3": ""
+        }
+      },
+      "max": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "Max",
+          "found2": "3_2",
+          "found3": "(CASE WHEN IfNull(ComplementoAplicacao3_2, '') IN ('','-','...','TODOS', '>') THEN strftime('%Y','now') ELSE ComplementoAplicacao3_2 END)"
+        },
+        "notfounds": {
+          "notfound1": "",
+          "notfound2": "",
+          "notfound3": ""
+        }
+      },
+      "codmontadora": {
+        "sql": "APLICACAO.CodigoFabricante = ?"
+      },
+      "veiculo": {
+        "sql": "upper(APLICACAO.DescricaoAplicacao<IDM>) = upper('?')"
+      },
+      "codgrupo": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.CodigoGrupoProduto = '?'",
+          "found2": "",
+          "found3": ""
+        },
+        "notfounds": {
+          "notfound1": "1=1",
+          "notfound2": "/*",
+          "notfound3": "*/ 1"
+        }
+      },
+      "codsubgrupo": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.CodigoSubGrupoProduto = '?'",
+          "found2": "",
+          "found3": ""
+        },
+        "notfounds": {
+          "notfound1": "1=1",
+          "notfound2": "/*",
+          "notfound3": "*/ 1"
+        }
+      },
+      "codtipoaplicacao": {
+        "sql": "APLICACAO.CodigoTipoAplicacao = ?"
+      },
+      "linha": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.CodigoGrupoProduto = '?'"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      }
+    },
+    "ordem": [
+      {
+        "Descricao": "DescricaoMin ASC, DescricaoMax ASC"
+      }
+    ]
+  },
+  "itemCarrinho": {
+    "base": "SELECT CodigoProduto, DescricaoProduto<IDM> AS DescricaoProduto, NumeroProduto, {codTabP}#1, CASE WHEN IfNull(upper(PRODUTO.CpoAuxProd2), '') IN ('X', 'SIM') THEN 1 ELSE 0 END AS ComRetentor FROM PRODUTO WHERE 1=1",
+    "filtro": {
+      "CodigoProduto": {
+        "sql": "CodigoProduto=?"
+      },
+      "codTabP": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "replace(printf('%.2f', (SELECT PI FROM TABPI WHERE TABPI.CodigoProduto = PRODUTO.CodigoProduto AND TABPI.CodigoTabP='?')), '.', ',') AS Preco"
+        },
+        "notfounds": {
+          "notfound1": "PRODUTO.PrecoProduto AS Preco"
+        }
+      }
+    },
+    "ordem": [
+      {
+        "CodigoProduto": "CodigoProduto"
+      }
+    ]
+  },
+  "carrinho": {
+    "base": "SELECT PRODUTO.CodigoProduto, DescricaoProduto<IDM> AS DescricaoProduto, NumeroProduto, upper(PRODUTO.ArquivoFotoProduto) AS ArquivoFotoProduto, upper(PRODUTO.ArquivoFotoProduto2) AS ArquivoFotoProduto2, upper('') AS ArquivoFotoProduto3, {codTabP}#1, CASE WHEN IfNull(upper(PRODUTO.CpoAuxProd2), '') IN ('X', 'SIM') THEN 1 ELSE 0 END AS ComRetentor FROM PRODUTO WHERE 1=1",
+    "filtro": {
+      "carrinho": {
+        "sql": "PRODUTO.CodigoProduto IN (?)",
+        "tipo": "dados"
+      },
+      "codTabP": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "replace(printf('%.2f', (SELECT PI FROM TABPI WHERE TABPI.CodigoProduto = PRODUTO.CodigoProduto AND TABPI.CodigoTabP='?')), '.', ',') AS Preco"
+        },
+        "notfounds": {
+          "notfound1": "PRODUTO.PrecoProduto AS Preco"
+        }
+      }
+    },
+    "ordem": [
+      {
+        "Descricao": "DescricaoProduto<IDM>"
+      }
+    ]
+  },
+  "dataAtualizacao": {
+    "base": "SELECT DataAtualizacao FROM UMREGISTRO",
+    "filtro": {},
+    "ordem": [
+      {
+        "Data": "DataAtualizacao"
+      }
+    ]
+  },
+  "palavrachave": {
+    "base": "select 1 from PRODUTO",
+    "filtro": {
+      "palavra": {
+        "sql": "Upper(PRODUTO.PCs<IDM>) Glob Upper(('*?*'))"
+      }
+    },
+    "ordem": [
+      {
+        "DescricaoProduto": "DescricaoProduto<IDM>"
+      }
+    ]
+  },
+  "countLancProm": {
+    "base": "SELECT 1 FROM PRODUTO",
+    "filtro": {
+      "lancamento": {
+        "sql": "PRODUTO.FlagLancamento=1"
+      },
+      "promocao": {
+        "sql": "PRODUTO.FlagPromocao=1"
+      },
+      "pontaestoque": {
+        "sql": "PRODUTO.FlagPontaEstoque=1"
+      },
+      "Lancamento": {
+        "sql": "PRODUTO.FlagLancamento=1"
+      },
+      "Promocao": {
+        "sql": "PRODUTO.FlagPromocao=1"
+      },
+      "PontaEstoque": {
+        "sql": "PRODUTO.FlagPontaEstoque=1"
+      }
+    },
+    "ordem": [
+      {
+        "PRODUTO.FlagLancamento": "PRODUTO.FlagLancamento"
+      }
+    ]
+  },
+  "verificaItem": {
+    "base": "SELECT CASE WHEN IfNull(upper(PRODUTO.CpoAuxProd11), '') IN ('S', 'SIM', '1') THEN 1 ELSE 0 END AS NaoInsereNoCarrinho, {codTabP}#1, PRODUTO.DescricaoProduto<IDM> AS DescricaoProduto, {Codigo2}#4 PRODUTO.NumeroProduto, PRODUTO.CodigoProduto, upper(PRODUTO.ArquivoFotoProduto) AS ArquivoFotoProduto, upper(PRODUTO.ArquivoFotoProduto2) AS ArquivoFotoProduto2, upper('') AS ArquivoFotoProduto3, (SELECT Group_Concat(Descricao, ', ') FROM (SELECT DISTINCT ' (' || REFERENCIACRUZADA.NumeroProduto || ')' AS Descricao, CASE WHEN IfNull(upper(PRODUTO.CpoAuxProd2), '') IN ('X', 'SIM') THEN 1 ELSE 0 END AS ComRetentor FROM REFERENCIACRUZADA INNER JOIN FABRICANTE ON REFERENCIACRUZADA.CodigoFabricante = FABRICANTE.CodigoFabricante WHERE REFERENCIACRUZADA.CodigoProduto = PRODUTO.CodigoProduto AND {Codigo2}#3)) AS nMontadora FROM PRODUTO WHERE ({Codigo2}#1 OR {Codigo2}#2)",
+    "filtro": {
+      "Codigo": {
+        "sql": "(PRODUTO.NumeroProdutoPesq GLOB '?')",
+        "tipo": "codigo"
+      },
+      "codTabP": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "replace(printf('%.2f', (SELECT PI FROM TABPI WHERE TABPI.CodigoProduto = PRODUTO.CodigoProduto AND TABPI.CodigoTabP='?')), '.', ',') AS Preco"
+        },
+        "notfounds": {
+          "notfound1": "PRODUTO.PrecoProduto AS Preco"
+        }
+      },
+      "Codigo2": {
+        "tipo": "codigo",
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.CodigoProduto IN (SELECT CodigoProduto FROM REFERENCIACRUZADA WHERE upper(REFERENCIACRUZADA.NumeroProdutoPesq) GLOB upper('*?*'))",
+          "found2": "upper(PRODUTO.NumeroProdutoPesq) GLOB upper('*?*')",
+          "found3": "upper(REFERENCIACRUZADA.NumeroProdutoPesq) GLOB upper('*?*')",
+          "found4": "(CASE WHEN upper(PRODUTO.NumeroProdutoPesq) GLOB upper('*?*') THEN 0 ELSE 1 END) AS orderBy,"
+        },
+        "notfounds": {
+          "notfound1": "1=1",
+          "notfound2": "1=1",
+          "notfound3": "1=1",
+          "notfound4": "0 AS orderBy"
+        }
+      }
+    },
+    "ordem": [
+      {
+        "orderBy": "orderBy, NumeroProduto"
+      }
+    ]
+  },
+  "informativos": {
+    "base": "SELECT * FROM INFORMATIVO WHERE TituloInformativo<IDM> <> '' AND TipoInformativo <> 'RTF' AND {codigo}#1 substr(upper(INFORMATIVO.TituloInformativo<IDM>), 1, 2) <> 'I#' AND {codigos}#1 {campo}#1 {codigos}#2 {codigo}#2",
+    "filtro": {
+      "campo": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "IfNull(INFORMATIVO.CategoriaInformativo, '') = '?'"
+        },
+        "notfounds": {
+          "notfound1": "IfNull(INFORMATIVO.CategoriaInformativo, '') = ''"
+        }
+      },
+      "codigos": {
+        "sql": "CodigoInformativo IN (?)",
+        "founds": {
+          "found1": "/*",
+          "found2": "*/1=1"
+        },
+        "notfounds": {
+          "notfound1": "",
+          "notfound2": ""
+        }
+      },
+      "codigo": {
+        "sql": "CodigoInformativo = ?",
+        "founds": {
+          "found1": "/*",
+          "found2": "*/1=1"
+        },
+        "notfounds": {
+          "notfound1": "",
+          "notfound2": ""
+        }
+      }
+    },
+    "ordem": [
+      {
+        "def": "CASE WHEN INFORMATIVO.OrdemInformativo IS NULL THEN 32000 ELSE INFORMATIVO.OrdemInformativo END DESC"
+      }
+    ]
+  },
+  "termostraducao": {
+    "base": "SELECT CASE WHEN EXISTS ( SELECT 1 FROM TERMOSTRAD ) then (SELECT '{' || group_concat(termo, ',') || '}' from ( SELECT ('\"' || REPLACE(TermoP, '\"', '\\\"') || '\": { \"I\": \"' || REPLACE(TermoI, '\"', '\\\"') || '\", \"E\": \"' || REPLACE(TermoE, '\"', '\\\"') || '\" }') AS termo from TERMOSTRAD )) else '' end  AS termosTrad",
+    "filtro": {},
+    "ordem": [
+      {
+        "1": "1=1"
+      }
+    ]
+  },
+  "arvoreFiltroMenuLateral": {
+    "base": "SELECT * FROM ( SELECT 0 AS typeFilter, 1 AS Codigo, 'Linha' AS Descricao UNION SELECT 1 AS typeFilter, 2 AS Codigo, 'Montadora' AS Descricao UNION SELECT 2 AS typeFilter, 3 AS Codigo, 'Produto' AS Descricao ) WHERE 1=1",
+    "filtro": {},
+    "ordem": [
+      {
+        "Descricao": "1"
+      }
+    ]
+  },
+  "temCategoriaInformativos": {
+    "base": "SELECT 1 FROM INFORMATIVO WHERE (TituloInformativo<IDM> <> '' AND TipoInformativo <> 'RTF' AND substr(INFORMATIVO.TituloInformativo<IDM>, 1, 2) <> 'I#')",
+    "filtro": {
+      "campo": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "upper(IfNull(INFORMATIVO.CategoriaInformativo, '')) = upper('?')"
+        },
+        "notfounds": {
+          "notfound1": "IfNull(INFORMATIVO.CategoriaInformativo, '') = ''"
+        }
+      }
+    },
+    "ordem": [
+      {
+        "1": "1=1"
+      }
+    ]
+  },
+  "filiais": {
+    "base": "SELECT * FROM DISTRIBUIDORES WHERE CASE WHEN NOT({distribuidor}#2 OR {centroTecnico}#2) THEN 1 ELSE {distribuidor}#1 OR {centroTecnico}#1 END",
+    "filtro": {
+      "distribuidor": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "FlagDistribuidor",
+          "found2": "1"
+        },
+        "notfounds": {
+          "notfound1": "1=2",
+          "notfound2": "0"
+        }
+      },
+      "centroTecnico": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "NOT FlagDistribuidor",
+          "found2": "1"
+        },
+        "notfounds": {
+          "notfound1": "1=2",
+          "notfound2": "0"
+        }
+      },
+      "palavrachave": {
+        "sql": "UPPER(DescricaoFilial) GLOB '*?*' OR UPPER(EnderecoFilial) GLOB '*?*'",
+        "tipo": "conjuntopalavra"
+      }
+    },
+    "ordem": []
+  },
+  "conjuntos_1": {
+    "base": "SELECT DISTINCT FIGURA_ITENS.CodigoFigura AS CodigoConjunto, FIGURA.DescricaoFigura AS DescricaoConjunto FROM FIGURA_ITENS INNER JOIN FIGURA ON FIGURA_ITENS.CodigoFigura = FIGURA.CodigoFigura",
+    "filtro": {
+      "CodigoProduto": {
+        "sql": "CodigoProduto = ?"
+      },
+      "NumeroProdutoPesq": {
+        "sql": "EXISTS(SELECT 1 FROM PRODUTO WHERE PRODUTO.CodigoProduto = FIGURA_ITENS.CodigoProduto AND PRODUTO.NumeroProdutoPesq = '?')"
+      }
+    },
+    "ordem": [
+      {
+        "item": "FIGURA_ITENS.CodigoProduto"
+      }
+    ]
+  },
+  "conjuntos_3": {
+    "base": "SELECT DISTINCT FIGURA_ITENS.CodigoFigura AS CodigoConjunto, FIGURA.DescricaoFigura AS DescricaoConjunto FROM CONJ_PRODS INNER JOIN FIGURA_ITENS ON CONJ_PRODS.CodProdComp = FIGURA_ITENS.CodigoProduto INNER JOIN FIGURA ON FIGURA_ITENS.CodigoFigura = FIGURA.CodigoFigura",
+    "filtro": {
+      "CodigoProduto": {
+        "sql": "CONJ_PRODS.CodProdConj = ?"
+      },
+      "NumeroProdutoPesq": {
+        "sql": "EXISTS(SELECT 1 FROM PRODUTO WHERE PRODUTO.CodigoProduto = CONJ_PRODS.CodProdConj AND PRODUTO.NumeroProdutoPesq = '?')"
+      }
+    },
+    "ordem": [
+      {
+        "item": "FIGURA_ITENS.CodigoProduto"
+      }
+    ]
+  },
+  "ItensFigura": {
+    "base": "SELECT DISTINCT {figura2}#2 AS inFigura, 0 AS orderBy, 0 AS Comercializado, FIGURA_ITENS.ItemFigura AS ItemFigura, FIGURA_ITENS.PosicaoLeft || 'px' AS x, FIGURA_ITENS.PosicaoTop || 'px' AS y, FIGURA_ITENS.CodigoItem AS CodigoItem, FIGURA.CodigoFigura AS CodigoFigura, FIGURA.ArquivoFigura AS ArquivoFigura, FIGURA.ObGrupoFig AS ObGrupoFig, FIGURA.CodGrupoFig AS CodGrupoFig, '' AS CodigoProduto, '' AS NumeroProduto, '' AS DescricaoProduto, '' AS ArquivoFotoProduto, '' AS ArquivoFotoProduto2, '' AS ArquivoFotoProduto3, '' AS CodProdComp, '' AS ItensCompoeComp, '' AS Quantidade, '' AS NumeroOriginal, '' AS Aplicacao FROM FIGURA_ITENS INNER JOIN FIGURA ON FIGURA_ITENS.CodigoFigura = FIGURA.CodigoFigura WHERE {figura2}#1",
+    "filtro": {
+      "figura2": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "FIGURA.CodigoFigura = ?",
+          "found2": "CASE WHEN FIGURA_ITENS.CodigoFigura = ? THEN 1 ELSE 0 END"
+        },
+        "notfounds": {
+          "notfound1": "FIGURA.CodigoFigura = ''",
+          "notfound2": "0"
+        }
+      }
+    },
+    "ordem": [
+      {
+        "item": "FIGURA_ITENS.ItemFigura"
+      }
+    ]
+  },
+  "conjuntos_2": {
+    "base": "SELECT DISTINCT {aux}#1 CASE WHEN substr(PRODUTO.NumeroProduto, 1, 1) = '#' THEN 0 ELSE 1 END AS Comercializado, CONJ_PRODS.CodProdConj AS CodigoConjunto, PRODUTO.CodigoProduto, PRODUTO.NumeroProduto AS NumeroConjunto, PRODUTO.DescricaoProduto AS DescricaoConjunto, PRODUTO.CodigoFiguraConj, ( SELECT group_concat(CodFigConj, ',') FROM ( SELECT FIGURA.CodigoFigura || CASE WHEN EXISTS( SELECT 1 FROM FIGURA_ITENS INNER JOIN CONJ_PRODS ON FIGURA_ITENS.ItemFigura = CONJ_PRODS.ItemFigura AND CONJ_PRODS.CodProdConj = PRODUTO.CodigoProduto AND {CodigoProduto}#1 AND {NumeroProdutoPesq}#1 WHERE FIGURA_ITENS.CodigoFigura = FIGURA.CodigoFigura) THEN '<!>temItem<!>' ELSE '' END AS CodFigConj FROM FIGURA WHERE FIGURA.CodGrupoFig = PRODUTO.CodigoFiguraConj ) ) AS todasFiguras FROM PRODUTO INNER JOIN CONJ_PRODS ON PRODUTO.CodigoProduto = CONJ_PRODS.CodProdConj INNER JOIN PRODUTO AS ITENS ON ITENS.CodigoProduto = CONJ_PRODS.CodProdComp WHERE 1=1",
+    "filtro": {
+      "CodigoProduto": {
+        "sql": "ITENS.CodigoProduto = ? OR PRODUTO.CodigoProduto = ?",
+        "founds": {
+          "found1": "CONJ_PRODS.CodProdComp = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "NumeroProdutoPesq": {
+        "sql": "(ITENS.CodigoProduto = (SELECT prodAux.CodigoProduto FROM PRODUTO AS prodAux WHERE upper(prodAux.NumeroProdutoPesq) = upper('?')) OR upper(PRODUTO.NumeroProdutoPesq) = upper('?'))",
+        "founds": {
+          "found1": "CONJ_PRODS.CodProdComp = (SELECT prodAux.CodigoProduto FROM PRODUTO AS prodAux WHERE upper(prodAux.NumeroProdutoPesq) = upper('?'))"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "aux": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "PRODUTO.CodigoProduto = '?' AS isConjunto, ITENS.CodigoProduto = '?' AS isComponente,"
+        },
+        "notfounds": {
+          "notfound1": ""
+        }
+      }
+    },
+    "ordem": [
+      {
+        "item": "DescricaoConjunto"
+      }
+    ]
+  },
+  "_componentes_1": {
+    "base": "SELECT 0 AS inFigura, 0 AS orderBy, NULL AS CodigoProduto,NULL AS NumeroProduto, NULL AS FlagPontaEstoque,NULL AS DescricaoProduto, NULL AS ArquivoFotoProduto,NULL AS Preco,NULL AS CodigoItem,NULL AS ItemFigura,NULL AS x,NULL AS y,ArquivoFigura,NULL AS NumeroOriginal FROM FIGURA WHERE {figura}#1 UNION SELECT {figura}#2, CASE WHEN ITENS.NumeroProduto = FIGURA_ITENS.ItemFigura THEN 0 ELSE 1 END AS orderBy, FIGURA_ITENS.CodigoProduto, ITENS.NumeroProduto, ITENS.FlagPontaEstoque AS FlagPontaEstoque, ITENS.DescricaoProduto<IDM> AS DescricaoProduto, ITENS.ArquivoFotoProduto, {codTabP}#1, FIGURA_ITENS.CodigoItem, FIGURA_ITENS.ItemFigura, FIGURA_ITENS.PosicaoLeft || 'px' AS 'x', FIGURA_ITENS.PosicaoTop || 'px' AS 'y',NULL AS ArquivoFigura, (SELECT Group_Concat(CpoNro, ';') FROM (SELECT IFNULL(DescricaoFabricante<IDM>, '') || ':' || group_concat(IFNULL(NumeroProduto, ''), ',') AS CpoNro, DescricaoFabricante<IDM>, NumeroProduto FROM ( SELECT REFERENCIACRUZADA.NumeroProdutoPesq, REFERENCIACRUZADA.NumeroProduto, REFERENCIACRUZADA.CodigoFabricante, FABRICANTE.DescricaoFabricante<IDM> FROM REFERENCIACRUZADA INNER JOIN FABRICANTE ON REFERENCIACRUZADA.CodigoFabricante = FABRICANTE.CodigoFabricante WHERE REFERENCIACRUZADA.CodigoProduto = ITENS.CodigoProduto ORDER BY FABRICANTE.DescricaoFabricante<IDM>, REFERENCIACRUZADA.NumeroProduto) GROUP BY CodigoFabricante ORDER BY DescricaoFabricante<IDM>, NumeroProduto )) AS NumeroOriginal FROM FIGURA_ITENS INNER JOIN PRODUTO AS ITENS ON ITENS.CodigoProduto = FIGURA_ITENS.CodigoProduto",
+    "filtro": {
+      "figura": {
+        "sql": "FIGURA_ITENS.CodigoFigura = ?",
+        "founds": {
+          "found1": "FIGURA.CodigoFigura=?",
+          "found2": "CASE WHEN FIGURA_ITENS.CodigoFigura = ? THEN 1 ELSE 0 END AS inFigura"
+        },
+        "notfounds": {
+          "notfound1": "1",
+          "notfound2": "0 AS inFigura"
+        }
+      },
+      "codTabP": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "replace(printf('%.2f', (SELECT PI FROM TABPI WHERE TABPI.CodigoProduto = ITENS.CodigoProduto AND TABPI.CodigoTabP='?')), '.', ',') AS Preco"
+        },
+        "notfounds": {
+          "notfound1": "ITENS.PrecoProduto AS Preco"
+        }
+      }
+    },
+    "ordem": [
+      {
+        "item": "orderBy, ITENS.NumeroProduto"
+      }
+    ]
+  },
+  "componentes_1": {
+    "base": "SELECT 0 AS inFigura, 0 AS orderBy, NULL AS CodigoProduto,NULL AS NumeroProduto, NULL AS FlagPontaEstoque,NULL AS DescricaoProduto, NULL AS ArquivoFotoProduto,NULL AS Preco,NULL AS CodigoItem,NULL AS ItemFigura,NULL AS x,NULL AS y,ArquivoFigura,NULL AS NumeroOriginal FROM FIGURA WHERE {figura}#1 UNION SELECT {figura}#2, CASE WHEN ITENS.NumeroProduto = FIGURA_ITENS.ItemFigura THEN 0 ELSE 1 END AS orderBy, FIGURA_ITENS.CodigoProduto, ITENS.NumeroProduto, ITENS.FlagPontaEstoque AS FlagPontaEstoque, ITENS.DescricaoProduto<IDM> AS DescricaoProduto, ITENS.ArquivoFotoProduto, {codTabP}#1, FIGURA_ITENS.CodigoItem, FIGURA_ITENS.ItemFigura, FIGURA_ITENS.PosicaoLeft || 'px' AS 'x', FIGURA_ITENS.PosicaoTop || 'px' AS 'y',NULL AS ArquivoFigura, (SELECT Group_Concat(CpoNro, ';') FROM (SELECT IFNULL(DescricaoFabricante<IDM>, '') || ':' || group_concat(IFNULL(NumeroProduto, ''), ',') AS CpoNro, DescricaoFabricante<IDM>, NumeroProduto FROM ( SELECT REFERENCIACRUZADA.NumeroProdutoPesq, REFERENCIACRUZADA.NumeroProduto, REFERENCIACRUZADA.CodigoFabricante, FABRICANTE.DescricaoFabricante<IDM> FROM REFERENCIACRUZADA INNER JOIN FABRICANTE ON REFERENCIACRUZADA.CodigoFabricante = FABRICANTE.CodigoFabricante WHERE REFERENCIACRUZADA.CodigoProduto = ITENS.CodigoProduto ORDER BY FABRICANTE.DescricaoFabricante<IDM>, REFERENCIACRUZADA.NumeroProduto) GROUP BY CodigoFabricante ORDER BY DescricaoFabricante<IDM>, NumeroProduto )) AS NumeroOriginal FROM FIGURA_ITENS INNER JOIN PRODUTO AS ITENS ON ITENS.CodigoProduto = FIGURA_ITENS.CodigoProduto",
+    "filtro": {
+      "figura": {
+        "sql": "FIGURA_ITENS.CodigoFigura = ?",
+        "founds": {
+          "found1": "FIGURA.CodigoFigura=?",
+          "found2": "CASE WHEN FIGURA_ITENS.CodigoFigura = ? THEN 1 ELSE 0 END AS inFigura"
+        },
+        "notfounds": {
+          "notfound1": "1",
+          "notfound2": "0 AS inFigura"
+        }
+      },
+      "codTabP": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "replace(printf('%.2f', (SELECT PI FROM TABPI WHERE TABPI.CodigoProduto = ITENS.CodigoProduto AND TABPI.CodigoTabP='?')), '.', ',') AS Preco"
+        },
+        "notfounds": {
+          "notfound1": "ITENS.PrecoProduto AS Preco"
+        }
+      }
+    },
+    "ordem": [
+      {
+        "item": "orderBy, ITENS.NumeroProduto"
+      }
+    ]
+  },
+  "count_componentes_1": {
+    "base": "SELECT COUNT(ITENS.CodigoProduto) + 1 AS Count FROM FIGURA_ITENS INNER JOIN PRODUTO AS ITENS ON ITENS.CodigoProduto = FIGURA_ITENS.CodigoProduto AND 1=1",
+    "filtro": {
+      "figura": {
+        "sql": "FIGURA_ITENS.CodigoFigura = ?"
+      }
+    },
+    "ordem": [
+      {
+        "": ""
+      }
+    ]
+  },
+  "_componentes_2": {
+    "base": "SELECT DISTINCT 0 AS inFigura, 0 AS orderBy, '' AS ItemFigura, '' AS x, '' AS y, '' AS CodigoItem, '' AS CodigoFigura, FIGURA.ArquivoFigura AS ArquivoFigura, FIGURA.ObGrupoFig AS ObGrupoFig, FIGURA.CodGrupoFig AS CodGrupoFig, '' AS CodigoProduto, '' AS NumeroProduto, 0 AS Comercializado, '' AS DescricaoProduto, '' AS ArquivoFotoProduto, '' AS ArquivoFotoProduto2, '' AS ArquivoFotoProduto3, '' AS CodProdComp, '' AS ItensCompoeComp, '' AS Quantidade, '' AS NumeroOriginal, '' AS Aplicacao FROM FIGURA_ITENS INNER JOIN FIGURA ON FIGURA_ITENS.CodigoFigura = FIGURA.CodigoFigura WHERE {figura2}#1 UNION SELECT DISTINCT {figura2}#2, CASE WHEN PRODUTO.NumeroProduto = FIGURA_ITENS.ItemFigura THEN 1 ELSE 2 END AS orderBy, CONJ_PRODS.ItemFigura AS ItemFigura, FIGURA_ITENS.PosicaoLeft || 'px' AS x, FIGURA_ITENS.PosicaoTop || 'px' AS y, FIGURA_ITENS.CodigoItem AS CodigoItem, FIGURA_ITENS.CodigoFigura AS CodigoFigura, '' AS ArquivoFigura, '' AS ObGrupoFig, '' AS CodGrupoFig, PRODUTO.CodigoProduto AS CodigoProduto, PRODUTO.NumeroProduto AS NumeroProduto, CASE WHEN substr(PRODUTO.NumeroProduto, 1, 1) = '#' THEN 0 ELSE 1 END AS Comercializado, PRODUTO.DescricaoProduto AS DescricaoProduto, upper(ifNull(PRODUTO.ArquivoFotoProduto, '')) AS ArquivoFotoProduto, '' AS ArquivoFotoProduto2, '' AS ArquivoFotoProduto3, CONJ_PRODS.CodProdComp AS CodProdComp, CONJ_PRODS.ItensCompoeComp AS ItensCompoeComp, CONJ_PRODS.Quantidade AS Quantidade, (SELECT Group_Concat(CpoNro, ';') FROM (SELECT IFNULL(DescricaoFabricante<IDM>, '') || ':' || group_concat(IFNULL(NumeroProduto, ''), ',') AS CpoNro, DescricaoFabricante<IDM>, NumeroProduto FROM ( SELECT REFERENCIACRUZADA.NumeroProdutoPesq, REFERENCIACRUZADA.NumeroProduto, REFERENCIACRUZADA.CodigoFabricante, FABRICANTE.DescricaoFabricante<IDM> FROM REFERENCIACRUZADA INNER JOIN FABRICANTE ON REFERENCIACRUZADA.CodigoFabricante = FABRICANTE.CodigoFabricante WHERE REFERENCIACRUZADA.CodigoProduto = PRODUTO.CodigoProduto ORDER BY FABRICANTE.DescricaoFabricante<IDM>, REFERENCIACRUZADA.NumeroProduto) GROUP BY CodigoFabricante ORDER BY DescricaoFabricante<IDM>, NumeroProduto )) AS NumeroOriginal, '' AS Aplicacao, {codTabP}#1 FROM PRODUTO INNER JOIN CONJ_PRODS ON PRODUTO.CodigoProduto = CONJ_PRODS.CodProdComp INNER JOIN PRODUTO AS PROD2 ON CONJ_PRODS.CodProdConj = PROD2.CodigoProduto LEFT JOIN FIGURA_ITENS ON PROD2.CodigoFiguraConj = FIGURA_ITENS.CodGrupoFig AND CONJ_PRODS.ItemFigura = FIGURA_ITENS.ItemFigura WHERE {conjunto}#1 /*and FIGURA.CodigoFigura = 16*/",
+    "filtro": {
+      "figura": {
+        "sql": "FIGURA_ITENS.CodigoFigura = ?",
+        "founds": {
+          "found1": "FIGURA.CodigoFigura=?"
+        },
+        "notfounds": {
+          "notfound1": "1"
+        }
+      },
+      "figura2": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "FIGURA.CodigoFigura = ?",
+          "found2": "CASE WHEN FIGURA_ITENS.CodigoFigura = ? THEN 1 ELSE 0 end as inFigura"
+        },
+        "notfounds": {
+          "notfound1": "FIGURA.CodigoFigura = ''",
+          "notfound2": "0"
+        }
+      },
+      "conjunto": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "CONJ_PRODS.CodProdConj = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codTabP": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "replace(printf('%.2f', (SELECT PI FROM TABPI WHERE TABPI.CodigoProduto = PRODUTO.CodigoProduto AND TABPI.CodigoTabP='?')), '.', ',') AS Preco"
+        },
+        "notfounds": {
+          "notfound1": "PRODUTO.PrecoProduto AS Preco"
+        }
+      }
+    },
+    "ordem": [
+      {
+        "item": "orderBy, FIGURA.ObGrupoFig, CONJ_PRODS.ItemFigura"
+      }
+    ]
+  },
+  "componentes_2": {
+    "base": "SELECT DISTINCT 0 AS inFigura, 0 AS orderBy, '' AS ItemFigura, '' AS x, '' AS y, '' AS CodigoItem, '' AS CodigoFigura, FIGURA.ArquivoFigura AS ArquivoFigura, FIGURA.ObGrupoFig AS ObGrupoFig, FIGURA.CodGrupoFig AS CodGrupoFig, '' AS CodigoProduto, '' AS NumeroProduto, 0 AS Comercializado, '' AS DescricaoProduto, '' AS ArquivoFotoProduto, '' AS ArquivoFotoProduto2, '' AS ArquivoFotoProduto3, '' AS CodProdComp, '' AS ItensCompoeComp, '' AS Quantidade, '' AS NumeroOriginal, '' AS Aplicacao, '' AS Preco, '' AS NaoInsereNoCarrinho FROM FIGURA_ITENS INNER JOIN FIGURA ON FIGURA_ITENS.CodigoFigura = FIGURA.CodigoFigura WHERE {figura2}#1 UNION SELECT DISTINCT {figura2}#2, CASE WHEN PRODUTO.NumeroProduto = FIGURA_ITENS.ItemFigura THEN 1 ELSE 2 END AS orderBy, CONJ_PRODS.ItemFigura AS ItemFigura, FIGURA_ITENS.PosicaoLeft || 'px' AS x, FIGURA_ITENS.PosicaoTop || 'px' AS y, FIGURA_ITENS.CodigoItem AS CodigoItem, FIGURA_ITENS.CodigoFigura AS CodigoFigura, '' AS ArquivoFigura, '' AS ObGrupoFig, '' AS CodGrupoFig, PRODUTO.CodigoProduto AS CodigoProduto, PRODUTO.NumeroProduto AS NumeroProduto, CASE WHEN substr(PRODUTO.NumeroProduto, 1, 1) = '#' THEN 0 ELSE 1 END AS Comercializado, PRODUTO.DescricaoProduto AS DescricaoProduto, upper(ifNull(PRODUTO.ArquivoFotoProduto, '')) AS ArquivoFotoProduto, '' AS ArquivoFotoProduto2, '' AS ArquivoFotoProduto3, CONJ_PRODS.CodProdComp AS CodProdComp, CONJ_PRODS.ItensCompoeComp AS ItensCompoeComp, CONJ_PRODS.Quantidade AS Quantidade, (SELECT Group_Concat(CpoNro, '<!;!>') FROM (SELECT IFNULL(DescricaoFabricante<IDM>, '') || '<!:!>' || group_concat(IFNULL(NumeroProduto, ''), '<!,!>') AS CpoNro, DescricaoFabricante<IDM>, NumeroProduto FROM ( SELECT REFERENCIACRUZADA.NumeroProdutoPesq, REFERENCIACRUZADA.NumeroProduto, REFERENCIACRUZADA.CodigoFabricante, FABRICANTE.DescricaoFabricante<IDM> FROM REFERENCIACRUZADA INNER JOIN FABRICANTE ON REFERENCIACRUZADA.CodigoFabricante = FABRICANTE.CodigoFabricante WHERE REFERENCIACRUZADA.CodigoProduto = PRODUTO.CodigoProduto ORDER BY FABRICANTE.DescricaoFabricante<IDM>, REFERENCIACRUZADA.NumeroProduto) GROUP BY CodigoFabricante ORDER BY DescricaoFabricante<IDM>, NumeroProduto )) AS NumeroOriginal, '' AS Aplicacao, {codTabP}#1, CASE WHEN IfNull(upper(PRODUTO.CpoAuxProd11), '') IN ('S', 'SIM', '1') THEN 1 ELSE 0 END AS NaoInsereNoCarrinho FROM PRODUTO INNER JOIN CONJ_PRODS ON PRODUTO.CodigoProduto = CONJ_PRODS.CodProdComp INNER JOIN PRODUTO AS PROD2 ON CONJ_PRODS.CodProdConj = PROD2.CodigoProduto LEFT JOIN FIGURA_ITENS ON PROD2.CodigoFiguraConj = FIGURA_ITENS.CodGrupoFig AND CONJ_PRODS.ItemFigura = FIGURA_ITENS.ItemFigura WHERE {conjunto}#1 /*and FIGURA.CodigoFigura = 16*/",
+    "filtro": {
+      "figura": {
+        "sql": "FIGURA_ITENS.CodigoFigura = ?",
+        "founds": {
+          "found1": "FIGURA.CodigoFigura=?"
+        },
+        "notfounds": {
+          "notfound1": "1"
+        }
+      },
+      "figura2": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "FIGURA.CodigoFigura = ?",
+          "found2": "CASE WHEN FIGURA_ITENS.CodigoFigura = ? THEN 1 ELSE 0 end as inFigura"
+        },
+        "notfounds": {
+          "notfound1": "FIGURA.CodigoFigura = ''",
+          "notfound2": "0"
+        }
+      },
+      "conjunto": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "CONJ_PRODS.CodProdConj = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codTabP": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "replace(printf('%.2f', (SELECT PI FROM TABPI WHERE TABPI.CodigoProduto = PRODUTO.CodigoProduto AND TABPI.CodigoTabP='?')), '.', ',') AS Preco"
+        },
+        "notfounds": {
+          "notfound1": "'0' AS Preco"
+        }
+      }
+    },
+    "ordem": [
+      {
+        "item": "orderBy, FIGURA.ObGrupoFig, CONJ_PRODS.ItemFigura"
+      }
+    ]
+  },
+  "count_componentes_2": {
+    "base": "SELECT COUNT(PRODUTO.CodigoProduto) AS Count FROM PRODUTO INNER JOIN CONJ_PRODS ON PRODUTO.CodigoProduto = CONJ_PRODS.CodProdComp INNER JOIN PRODUTO AS PROD2 ON CONJ_PRODS.CodProdConj = PROD2.CodigoProduto LEFT JOIN FIGURA_ITENS ON PROD2.CodigoFiguraConj = FIGURA_ITENS.CodGrupoFig AND CONJ_PRODS.ItemFigura = FIGURA_ITENS.ItemFigura LEFT JOIN (SELECT CodigoProduto, Group_Concat(DescricaoFabricante || '<!:!>' || Aplic , '<!;!>') as Aplic2 FROM (SELECT DISTINCT PRODUTO.CodigoProduto, FABRICANTE.DescricaoFabricante<IDM> AS DescricaoFabricante, Group_Concat('Veículo<|>' || ifnull( APLICACAO.DescricaoAplicacao<IDM>, '' ) || '<||>Ano<|>' || IFNULL(ComplementoAplicacao, ''), '<!,!>') as Aplic  FROM  CONJ_PRODS INNER JOIN PRODUTO ON CONJ_PRODS.CodProdComp = PRODUTO.CodigoProduto INNER JOIN PRODUTO AS PROD2 ON CONJ_PRODS.CodProdConj = PROD2.CodigoProduto INNER JOIN PRODUTO_APLICACAO on PRODUTO.CodigoProduto = PRODUTO_APLICACAO.CodigoProduto INNER JOIN APLICACAO on PRODUTO_APLICACAO.CodigoAplicacao = APLICACAO.CodigoAplicacao LEFT JOIN FABRICANTE on APLICACAO.CodigoFabricante = FABRICANTE.CodigoFabricante WHERE     {conjunto}#1 AND {codMontadoraEixo}#1 AND {codMontadora}#1 AND {veiculoEixo}#1 AND {veiculo}#1 GROUP BY PRODUTO.CodigoProduto, FABRICANTE.DescricaoFabricante<IDM>) AS APLICACAO GROUP BY CodigoProduto ) AS AP ON PRODUTO.CodigoProduto = AP.CodigoProduto WHERE {conjunto}#1 AND PRODUTO.FlagPontaEstoque = 0 /*and FIGURA.CodigoFigura = 16*/",
+    "filtro": {
+      "figura": {
+        "sql": "FIGURA_ITENS.CodigoFigura = ?",
+        "founds": {
+          "found1": "FIGURA.CodigoFigura=?"
+        },
+        "notfounds": {
+          "notfound1": "1"
+        }
+      },
+      "figura2": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "FIGURA.CodigoFigura = ?"
+        },
+        "notfounds": {
+          "notfound1": "FIGURA.CodigoFigura = ''"
+        }
+      },
+      "conjunto": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "CONJ_PRODS.CodProdConj = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codMontadoraEixo": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoFabricante = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codMontadora": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoFabricante = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "veiculoEixo": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "upper(APLICACAO.DescricaoAplicacao<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "veiculo": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "upper(APLICACAO.DescricaoAplicacao<IDM>) = upper('?')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      }
+    },
+    "ordem": [
+      {
+        "": ""
+      }
+    ]
+  },
+  "componentesFaltantes": {
+    "base": "SELECT PRODUTO.NumeroProduto, PRODUTO.DescricaoProduto<IDM> AS DescricaoProduto, PRODUTO.ArquivoFotoProduto FROM PRODUTO",
+    "filtro": {
+      "produtos": {
+        "sql": "upper(PRODUTO.NumeroProduto) IN (?)",
+        "tipo": "dados"
+      }
+    },
+    "ordem": [
+      {}
+    ]
+  },
+  "listaVE": {
+    "base": "SELECT DISTINCT PRODUTO.CodigoProduto, PRODUTO.CodigoGrupoProduto, PRODUTO.CodigoSubGrupoProduto, PRODUTO.NumeroProduto ,PRODUTO.DescricaoProduto<IDM> AS DescricaoProduto, {codTabP}#1, PRODUTO.FlagLancamento, PRODUTO.DataFlagLancamento, PRODUTO.FlagPontaEstoque FROM PRODUTO INNER JOIN FIGURA_ITENS ON PRODUTO.CodigoProduto = FIGURA_ITENS.CodigoProduto WHERE 1=1",
+    "filtro": {
+      "CodigoFigura": {
+        "sql": "FIGURA_ITENS.CodigoFigura = ?"
+      },
+      "codTabP": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "replace(printf('%.2f', (SELECT PI FROM TABPI WHERE TABPI.CodigoProduto = PRODUTO.CodigoProduto AND TABPI.CodigoTabP='?')), '.', ',') AS Preco"
+        },
+        "notfounds": {
+          "notfound1": "PRODUTO.PrecoProduto AS Preco"
+        }
+      }
+    },
+    "ordem": [
+      {
+        "item": "FIGURA_ITENS.ItemFigura"
+      }
+    ]
+  },
+  "figura": {
+    "base": "SELECT URIG FROM FOTOS",
+    "filtro": {
+      "ArquivoFoto": {
+        "sql": "ArquivoFoto IN (?) AND Pasta = 'Figuras'",
+        "tipo": "dados"
+      }
+    },
+    "ordem": [
+      {
+        "ArquivoFoto": "ArquivoFoto"
+      }
+    ],
+    "db": "m02.db"
+  },
+  "figuraURIG": {
+    "base": "SELECT URIG FROM FOTOS",
+    "filtro": {
+      "ArquivoFoto": {
+        "sql": "ArquivoFoto = '?' AND Pasta = 'Figuras'",
+        "tipo": "dados"
+      }
+    },
+    "ordem": [
+      {
+        "ArquivoFoto": "ArquivoFoto"
+      }
+    ],
+    "db": "m02.db"
+  },
+  "verificaProduto": {
+    "base": "SELECT DescricaoProduto<IDM>, CodigoProduto, NumeroProduto, {codTabP}#1 FROM PRODUTO",
+    "filtro": {
+      "CodigoProduto": {
+        "sql": "CodigoProduto IN (?)"
+      },
+      "codTabP": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "replace(printf('%.2f', (SELECT PI FROM TABPI WHERE TABPI.CodigoProduto = PRODUTO.CodigoProduto AND TABPI.CodigoTabP='?')), '.', ',') AS Preco"
+        },
+        "notfounds": {
+          "notfound1": "PRODUTO.PrecoProduto AS Preco"
+        }
+      }
+    },
+    "ordem": [
+      {}
+    ]
+  },
+  "itemByBarcode": {
+    "base": "SELECT PRODUTO.CodigoProduto, PRODUTO.NumeroProduto, PRODUTO.DescricaoProduto, upper(PRODUTO.ArquivoFotoProduto) AS ArquivoFotoProduto, upper(PRODUTO.ArquivoFotoProduto2) AS ArquivoFotoProduto2, upper('') AS ArquivoFotoProduto3 FROM PRODUTO",
+    "filtro": {
+      "barcode": {
+        "sql": "PRODUTO.NumeroProduto = '?'"
+      }
+    },
+    "ordem": [
+      {
+        "DescricaoProduto": "DescricaoProduto"
+      }
+    ]
+  },
+  "videos": {
+    "base": "SELECT CodsVideos<IDM> AS CodsVideos FROM TABCODSVIDEOS",
+    "filtro": {},
+    "ordem": []
+  },
+  "estrias": {
+    "base": "SELECT DISTINCT PRODUTO.CpoAuxProd3 AS Descricao FROM PRODUTO LEFT JOIN PRODUTO_APLICACAO ON PRODUTO.CodigoProduto = PRODUTO_APLICACAO.CodigoProduto LEFT JOIN APLICACAO ON PRODUTO_APLICACAO.CodigoAplicacao = APLICACAO.CodigoAplicacao WHERE IfNull(Descricao, '') <> '' AND {pesquisaInterna}#1 AND {veiculo_text}#1 AND IfNull(upper(PRODUTO.CpoAuxProd11), '') NOT IN ('S', 'SIM', '1')",
+    "filtro": {
+      "pesquisaInterna": {
+        "sql": "1=1",
+        "tipo": "conjuntopalavra",
+        "founds": {
+          "found1": "Upper(Descricao) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codmontadora": {
+        "sql": "APLICACAO.CodigoFabricante = ?"
+      },
+      "veiculo_text": {
+        "sql": "1=1",
+        "tipo": "aplicacao",
+        "founds": {
+          "found1": "Upper(APLICACAO.DescricaoAplicacao<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codgrupo": {
+        "sql": "PRODUTO.CodigoGrupoProduto = ?"
+      },
+      "diametro": {
+        "sql": "PRODUTO.CpoAuxProd4 = '?'"
+      }
+    },
+    "ordem": [
+      {
+        "Descricao": "Descricao"
+      }
+    ]
+  },
+  "diametro": {
+    "base": "SELECT DISTINCT PRODUTO.CpoAuxProd4 AS Descricao FROM PRODUTO LEFT JOIN PRODUTO_APLICACAO ON PRODUTO.CodigoProduto = PRODUTO_APLICACAO.CodigoProduto LEFT JOIN APLICACAO ON PRODUTO_APLICACAO.CodigoAplicacao = APLICACAO.CodigoAplicacao WHERE IfNull(Descricao, '') <> '' AND {pesquisaInterna}#1 AND {veiculo_text}#1 AND IfNull(upper(PRODUTO.CpoAuxProd11), '') NOT IN ('S', 'SIM', '1')",
+    "filtro": {
+      "pesquisaInterna": {
+        "sql": "1=1",
+        "tipo": "conjuntopalavra",
+        "founds": {
+          "found1": "Upper(Descricao) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codmontadora": {
+        "sql": "APLICACAO.CodigoFabricante = ?"
+      },
+      "veiculo_text": {
+        "sql": "1=1",
+        "tipo": "aplicacao",
+        "founds": {
+          "found1": "Upper(APLICACAO.DescricaoAplicacao<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codgrupo": {
+        "sql": "PRODUTO.CodigoGrupoProduto = ?"
+      },
+      "estrias": {
+        "sql": "PRODUTO.CpoAuxProd3 = '?'"
+      },
+      "passoDeRosca": {
+        "sql": "PRODUTO.CpoAuxProd5 = '?'"
+      },
+      "comprimento": {
+        "sql": "PRODUTO.CpoAuxProd6 = '?'"
+      }
+    },
+    "ordem": [
+      {
+        "Descricao": "Descricao"
+      }
+    ]
+  },
+  "passoDeRosca": {
+    "base": "SELECT DISTINCT PRODUTO.CpoAuxProd5 AS Descricao FROM PRODUTO LEFT JOIN PRODUTO_APLICACAO ON PRODUTO.CodigoProduto = PRODUTO_APLICACAO.CodigoProduto LEFT JOIN APLICACAO ON PRODUTO_APLICACAO.CodigoAplicacao = APLICACAO.CodigoAplicacao WHERE IfNull(Descricao, '') <> '' AND {pesquisaInterna}#1 AND {veiculo_text}#1 AND IfNull(upper(PRODUTO.CpoAuxProd11), '') NOT IN ('S', 'SIM', '1')",
+    "filtro": {
+      "pesquisaInterna": {
+        "sql": "1=1",
+        "tipo": "conjuntopalavra",
+        "founds": {
+          "found1": "Upper(Descricao) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codmontadora": {
+        "sql": "APLICACAO.CodigoFabricante = ?"
+      },
+      "veiculo_text": {
+        "sql": "1=1",
+        "tipo": "aplicacao",
+        "founds": {
+          "found1": "Upper(APLICACAO.DescricaoAplicacao<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codgrupo": {
+        "sql": "PRODUTO.CodigoGrupoProduto = ?"
+      },
+      "diametro": {
+        "sql": "PRODUTO.CpoAuxProd4 = '?'"
+      },
+      "comprimento": {
+        "sql": "PRODUTO.CpoAuxProd6 = '?'"
+      }
+    },
+    "ordem": [
+      {
+        "Descricao": "Descricao"
+      }
+    ]
+  },
+  "comprimento": {
+    "base": "SELECT DISTINCT PRODUTO.CpoAuxProd6 AS Descricao FROM PRODUTO LEFT JOIN PRODUTO_APLICACAO ON PRODUTO.CodigoProduto = PRODUTO_APLICACAO.CodigoProduto LEFT JOIN APLICACAO ON PRODUTO_APLICACAO.CodigoAplicacao = APLICACAO.CodigoAplicacao WHERE IfNull(Descricao, '') <> '' AND {pesquisaInterna}#1 AND {veiculo_text}#1 AND IfNull(upper(PRODUTO.CpoAuxProd11), '') NOT IN ('S', 'SIM', '1')",
+    "filtro": {
+      "pesquisaInterna": {
+        "sql": "1=1",
+        "tipo": "conjuntopalavra",
+        "founds": {
+          "found1": "Upper(Descricao) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codmontadora": {
+        "sql": "APLICACAO.CodigoFabricante = ?"
+      },
+      "veiculo_text": {
+        "sql": "1=1",
+        "tipo": "aplicacao",
+        "founds": {
+          "found1": "Upper(APLICACAO.DescricaoAplicacao<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codgrupo": {
+        "sql": "PRODUTO.CodigoGrupoProduto = ?"
+      },
+      "diametro": {
+        "sql": "PRODUTO.CpoAuxProd4 = '?'"
+      },
+      "haste": {
+        "sql": "PRODUTO.CpoAuxProd21 = '?'"
+      },
+      "cabeca": {
+        "sql": "PRODUTO.CpoAuxProd22 = '?'"
+      },
+      "qtdRanhuras": {
+        "sql": "PRODUTO.CpoAuxProd23 = '?'"
+      },
+      "angulo": {
+        "sql": "PRODUTO.CpoAuxProd24 = '?'"
+      },
+      "passoDeRosca": {
+        "sql": "PRODUTO.CpoAuxProd5 = '?'"
+      }
+    },
+    "ordem": [
+      {
+        "Descricao": "Descricao"
+      }
+    ]
+  },
+  "haste": {
+    "base": "SELECT DISTINCT PRODUTO.CpoAuxProd21 AS Descricao FROM PRODUTO LEFT JOIN PRODUTO_APLICACAO ON PRODUTO.CodigoProduto = PRODUTO_APLICACAO.CodigoProduto LEFT JOIN APLICACAO ON PRODUTO_APLICACAO.CodigoAplicacao = APLICACAO.CodigoAplicacao WHERE IfNull(Descricao, '') <> '' AND {pesquisaInterna}#1 AND {veiculo_text}#1 AND IfNull(upper(PRODUTO.CpoAuxProd11), '') NOT IN ('S', 'SIM', '1')",
+    "filtro": {
+      "pesquisaInterna": {
+        "sql": "1=1",
+        "tipo": "conjuntopalavra",
+        "founds": {
+          "found1": "Upper(Descricao) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codmontadora": {
+        "sql": "APLICACAO.CodigoFabricante = ?"
+      },
+      "veiculo_text": {
+        "sql": "1=1",
+        "tipo": "aplicacao",
+        "founds": {
+          "found1": "Upper(APLICACAO.DescricaoAplicacao<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codgrupo": {
+        "sql": "PRODUTO.CodigoGrupoProduto = ?"
+      },
+      "cabeca": {
+        "sql": "PRODUTO.CpoAuxProd22 = '?'"
+      },
+      "comprimento": {
+        "sql": "PRODUTO.CpoAuxProd6 = '?'"
+      },
+      "qtdRanhuras": {
+        "sql": "PRODUTO.CpoAuxProd23 = '?'"
+      },
+      "angulo": {
+        "sql": "PRODUTO.CpoAuxProd24 = '?'"
+      }
+    },
+    "ordem": [
+      {
+        "Descricao": "Descricao"
+      }
+    ]
+  },
+  "cabeca": {
+    "base": "SELECT DISTINCT PRODUTO.CpoAuxProd22 AS Descricao FROM PRODUTO LEFT JOIN PRODUTO_APLICACAO ON PRODUTO.CodigoProduto = PRODUTO_APLICACAO.CodigoProduto LEFT JOIN APLICACAO ON PRODUTO_APLICACAO.CodigoAplicacao = APLICACAO.CodigoAplicacao WHERE IfNull(Descricao, '') <> '' AND {pesquisaInterna}#1 AND {veiculo_text}#1 AND IfNull(upper(PRODUTO.CpoAuxProd11), '') NOT IN ('S', 'SIM', '1')",
+    "filtro": {
+      "pesquisaInterna": {
+        "sql": "1=1",
+        "tipo": "conjuntopalavra",
+        "founds": {
+          "found1": "Upper(Descricao) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codmontadora": {
+        "sql": "APLICACAO.CodigoFabricante = ?"
+      },
+      "veiculo_text": {
+        "sql": "1=1",
+        "tipo": "aplicacao",
+        "founds": {
+          "found1": "Upper(APLICACAO.DescricaoAplicacao<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codgrupo": {
+        "sql": "PRODUTO.CodigoGrupoProduto = ?"
+      },
+      "haste": {
+        "sql": "PRODUTO.CpoAuxProd21 = '?'"
+      },
+      "comprimento": {
+        "sql": "PRODUTO.CpoAuxProd6 = '?'"
+      },
+      "qtdRanhuras": {
+        "sql": "PRODUTO.CpoAuxProd23 = '?'"
+      },
+      "angulo": {
+        "sql": "PRODUTO.CpoAuxProd24 = '?'"
+      }
+    },
+    "ordem": [
+      {
+        "Descricao": "Descricao"
+      }
+    ]
+  },
+  "qtdRanhuras": {
+    "base": "SELECT DISTINCT PRODUTO.CpoAuxProd23 AS Descricao FROM PRODUTO LEFT JOIN PRODUTO_APLICACAO ON PRODUTO.CodigoProduto = PRODUTO_APLICACAO.CodigoProduto LEFT JOIN APLICACAO ON PRODUTO_APLICACAO.CodigoAplicacao = APLICACAO.CodigoAplicacao WHERE IfNull(Descricao, '') <> '' AND {pesquisaInterna}#1 AND {veiculo_text}#1 AND IfNull(upper(PRODUTO.CpoAuxProd11), '') NOT IN ('S', 'SIM', '1')",
+    "filtro": {
+      "pesquisaInterna": {
+        "sql": "1=1",
+        "tipo": "conjuntopalavra",
+        "founds": {
+          "found1": "Upper(Descricao) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codmontadora": {
+        "sql": "APLICACAO.CodigoFabricante = ?"
+      },
+      "veiculo_text": {
+        "sql": "1=1",
+        "tipo": "aplicacao",
+        "founds": {
+          "found1": "Upper(APLICACAO.DescricaoAplicacao<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codgrupo": {
+        "sql": "PRODUTO.CodigoGrupoProduto = ?"
+      },
+      "haste": {
+        "sql": "PRODUTO.CpoAuxProd21 = '?'"
+      },
+      "comprimento": {
+        "sql": "PRODUTO.CpoAuxProd6 = '?'"
+      },
+      "cabeca": {
+        "sql": "PRODUTO.CpoAuxProd22 = '?'"
+      },
+      "angulo": {
+        "sql": "PRODUTO.CpoAuxProd24 = '?'"
+      }
+    },
+    "ordem": [
+      {
+        "Descricao": "Descricao"
+      }
+    ]
+  },
+  "angulo": {
+    "base": "SELECT DISTINCT PRODUTO.CpoAuxProd24 AS Descricao FROM PRODUTO LEFT JOIN PRODUTO_APLICACAO ON PRODUTO.CodigoProduto = PRODUTO_APLICACAO.CodigoProduto LEFT JOIN APLICACAO ON PRODUTO_APLICACAO.CodigoAplicacao = APLICACAO.CodigoAplicacao WHERE IfNull(Descricao, '') <> '' AND {pesquisaInterna}#1 AND {veiculo_text}#1 AND IfNull(upper(PRODUTO.CpoAuxProd11), '') NOT IN ('S', 'SIM', '1')",
+    "filtro": {
+      "pesquisaInterna": {
+        "sql": "1=1",
+        "tipo": "conjuntopalavra",
+        "founds": {
+          "found1": "Upper(Descricao) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codmontadora": {
+        "sql": "APLICACAO.CodigoFabricante = ?"
+      },
+      "veiculo_text": {
+        "sql": "1=1",
+        "tipo": "aplicacao",
+        "founds": {
+          "found1": "Upper(APLICACAO.DescricaoAplicacao<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codgrupo": {
+        "sql": "PRODUTO.CodigoGrupoProduto = ?"
+      },
+      "haste": {
+        "sql": "PRODUTO.CpoAuxProd21 = '?'"
+      },
+      "comprimento": {
+        "sql": "PRODUTO.CpoAuxProd6 = '?'"
+      },
+      "cabeca": {
+        "sql": "PRODUTO.CpoAuxProd22 = '?'"
+      },
+      "qtdRanhuras": {
+        "sql": "PRODUTO.CpoAuxProd23 = '?'"
+      }
+    },
+    "ordem": [
+      {
+        "Descricao": "Descricao"
+      }
+    ]
+  },
+  "eixo": {
+    "base": "SELECT DISTINCT PRODUTO.CpoAuxProd7 AS Descricao FROM PRODUTO LEFT JOIN PRODUTO_APLICACAO ON PRODUTO.CodigoProduto = PRODUTO_APLICACAO.CodigoProduto LEFT JOIN APLICACAO ON PRODUTO_APLICACAO.CodigoAplicacao = APLICACAO.CodigoAplicacao WHERE IfNull(Descricao, '') <> '' AND {pesquisaInterna}#1 AND {veiculo_text}#1 AND IfNull(upper(PRODUTO.CpoAuxProd11), '') NOT IN ('S', 'SIM', '1')",
+    "filtro": {
+      "pesquisaInterna": {
+        "sql": "1=1",
+        "tipo": "conjuntopalavra",
+        "founds": {
+          "found1": "Upper(Descricao) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codmontadora": {
+        "sql": "APLICACAO.CodigoFabricante = ?"
+      },
+      "veiculo_text": {
+        "sql": "1=1",
+        "tipo": "aplicacao",
+        "founds": {
+          "found1": "Upper(APLICACAO.DescricaoAplicacao<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codgrupo": {
+        "sql": "PRODUTO.CodigoGrupoProduto = ?"
+      },
+      "alojamento": {
+        "sql": "PRODUTO.CpoAuxProd8 = '?'"
+      },
+      "altura": {
+        "sql": "PRODUTO.CpoAuxProd9 = '?'"
+      }
+    },
+    "ordem": [
+      {
+        "Descricao": "Descricao"
+      }
+    ]
+  },
+  "alojamento": {
+    "base": "SELECT DISTINCT PRODUTO.CpoAuxProd8 AS Descricao FROM PRODUTO LEFT JOIN PRODUTO_APLICACAO ON PRODUTO.CodigoProduto = PRODUTO_APLICACAO.CodigoProduto LEFT JOIN APLICACAO ON PRODUTO_APLICACAO.CodigoAplicacao = APLICACAO.CodigoAplicacao WHERE IfNull(Descricao, '') <> '' AND {pesquisaInterna}#1 AND {veiculo_text}#1 AND IfNull(upper(PRODUTO.CpoAuxProd11), '') NOT IN ('S', 'SIM', '1')",
+    "filtro": {
+      "pesquisaInterna": {
+        "sql": "1=1",
+        "tipo": "conjuntopalavra",
+        "founds": {
+          "found1": "Upper(Descricao) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codmontadora": {
+        "sql": "APLICACAO.CodigoFabricante = ?"
+      },
+      "veiculo_text": {
+        "sql": "1=1",
+        "tipo": "aplicacao",
+        "founds": {
+          "found1": "Upper(APLICACAO.DescricaoAplicacao<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codgrupo": {
+        "sql": "PRODUTO.CodigoGrupoProduto = ?"
+      },
+      "eixo": {
+        "sql": "PRODUTO.CpoAuxProd7 = '?'"
+      },
+      "altura": {
+        "sql": "PRODUTO.CpoAuxProd9 = '?'"
+      }
+    },
+    "ordem": [
+      {
+        "Descricao": "Descricao"
+      }
+    ]
+  },
+  "altura": {
+    "base": "SELECT DISTINCT PRODUTO.CpoAuxProd9 AS Descricao FROM PRODUTO LEFT JOIN PRODUTO_APLICACAO ON PRODUTO.CodigoProduto = PRODUTO_APLICACAO.CodigoProduto LEFT JOIN APLICACAO ON PRODUTO_APLICACAO.CodigoAplicacao = APLICACAO.CodigoAplicacao WHERE IfNull(Descricao, '') <> '' AND {pesquisaInterna}#1 AND {veiculo_text}#1 AND IfNull(upper(PRODUTO.CpoAuxProd11), '') NOT IN ('S', 'SIM', '1')",
+    "filtro": {
+      "pesquisaInterna": {
+        "sql": "1=1",
+        "tipo": "conjuntopalavra",
+        "founds": {
+          "found1": "Upper(Descricao) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codmontadora": {
+        "sql": "APLICACAO.CodigoFabricante = ?"
+      },
+      "veiculo_text": {
+        "sql": "1=1",
+        "tipo": "aplicacao",
+        "founds": {
+          "found1": "Upper(APLICACAO.DescricaoAplicacao<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codgrupo": {
+        "sql": "PRODUTO.CodigoGrupoProduto = ?"
+      },
+      "eixo": {
+        "sql": "PRODUTO.CpoAuxProd7 = '?'"
+      },
+      "alojamento": {
+        "sql": "PRODUTO.CpoAuxProd8 = '?'"
+      },
+      "externo": {
+        "sql": "PRODUTO.CpoAuxProd10 = '?'"
+      }
+    },
+    "ordem": [
+      {
+        "Descricao": "Descricao"
+      }
+    ]
+  },
+  "externo": {
+    "base": "SELECT DISTINCT PRODUTO.CpoAuxProd10 AS Descricao FROM PRODUTO LEFT JOIN PRODUTO_APLICACAO ON PRODUTO.CodigoProduto = PRODUTO_APLICACAO.CodigoProduto LEFT JOIN APLICACAO ON PRODUTO_APLICACAO.CodigoAplicacao = APLICACAO.CodigoAplicacao WHERE IfNull(Descricao, '') <> '' AND {pesquisaInterna}#1 AND {veiculo_text}#1 AND IfNull(upper(PRODUTO.CpoAuxProd11), '') NOT IN ('S', 'SIM', '1')",
+    "filtro": {
+      "pesquisaInterna": {
+        "sql": "1=1",
+        "tipo": "conjuntopalavra",
+        "founds": {
+          "found1": "Upper(Descricao) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codmontadora": {
+        "sql": "APLICACAO.CodigoFabricante = ?"
+      },
+      "veiculo_text": {
+        "sql": "1=1",
+        "tipo": "aplicacao",
+        "founds": {
+          "found1": "Upper(APLICACAO.DescricaoAplicacao<IDM>) GLOB upper('*?*')"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codgrupo": {
+        "sql": "PRODUTO.CodigoGrupoProduto = ?"
+      },
+      "altura": {
+        "sql": "PRODUTO.CpoAuxProd9 = '?'"
+      }
+    },
+    "ordem": [
+      {
+        "Descricao": "Descricao"
+      }
+    ]
+  },
+  "manualDeTorque1": {
+    "base": "SELECT DISTINCT TIPOAPLICACAO.DescricaoTipoAplicacao<IDM> AS Descricao, TIPOAPLICACAO.CodigoTipoAplicacao AS Codigo FROM APLICACAO INNER JOIN TIPOAPLICACAO ON APLICACAO.CodigoTipoAplicacao = TIPOAPLICACAO.CodigoTipoAplicacao WHERE EXISTS (SELECT 1 FROM PRODUTO INNER JOIN PRODUTO_APLICACAO ON PRODUTO_APLICACAO.CodigoProduto = PRODUTO.CodigoProduto WHERE PRODUTO_APLICACAO.CodigoAplicacao = APLICACAO.CodigoAplicacao AND Upper(SubStr(IfNull(PRODUTO.ArquivoFotoProduto2, ''), 1, 5)) = 'MNTQ_')",
+    "filtro": {},
+    "ordem": [
+      {
+        "Descricao": "Descricao"
+      }
+    ]
+  },
+  "manualDeTorque2": {
+    "base": "SELECT DISTINCT 'Manual de Torque ' || FABRICANTE.DescricaoFabricante AS Descricao, FABRICANTE.CodigoFabricante AS Codigo FROM FABRICANTE WHERE EXISTS (SELECT 1 FROM APLICACAO INNER JOIN PRODUTO_APLICACAO ON APLICACAO.CodigoAplicacao = PRODUTO_APLICACAO.CodigoAplicacao INNER JOIN PRODUTO ON PRODUTO_APLICACAO.CodigoProduto = PRODUTO.CodigoProduto WHERE FABRICANTE.CodigoFabricante = APLICACAO.CodigoFabricante AND Upper(SubStr(IfNull(PRODUTO.ArquivoFotoProduto2, ''), 1, 5)) = 'MNTQ_' AND {codmanualDeTorque1}#1) AND FABRICANTE.FlagAplicacao = 1",
+    "filtro": {
+      "codmanualDeTorque1": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoTipoAplicacao = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      }
+    },
+    "ordem": [
+      {
+        "Descricao": "Descricao"
+      }
+    ]
+  },
+  "manualDeTorque3": {
+    "base": "SELECT DISTINCT NumeroProduto || ' - ' || DescricaoProduto<IDM> AS Descricao, ArquivoFotoProduto2 AS Foto FROM PRODUTO INNER JOIN PRODUTO_APLICACAO ON PRODUTO.CodigoProduto = PRODUTO_APLICACAO.CodigoProduto INNER JOIN APLICACAO ON APLICACAO.CodigoAplicacao = PRODUTO_APLICACAO.CodigoAplicacao WHERE Upper(SubStr(IfNull(PRODUTO.ArquivoFotoProduto2, ''), 1, 5)) = 'MNTQ_' AND {codmanualDeTorque1}#1 AND {codmanualDeTorque2}#1",
+    "filtro": {
+      "codmanualDeTorque1": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoTipoAplicacao = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      },
+      "codmanualDeTorque2": {
+        "sql": "1=1",
+        "founds": {
+          "found1": "APLICACAO.CodigoFabricante = ?"
+        },
+        "notfounds": {
+          "notfound1": "1=1"
+        }
+      }
+    },
+    "ordem": [
+      {
+        "Descricao": "Descricao"
+      }
+    ]
+  }
+}

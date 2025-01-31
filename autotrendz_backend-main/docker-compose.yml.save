@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  autotrendz_app:
+    container_name: autotrendz_app
+    platform: linux/x86_64
+    image: ghcr.io/autotrendz/autotrendz_backend:latest
+    restart: always
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - .env
+    networks:
+      - main
+      - autotrendz_network
+
+  db:
+    container_name: autotrendz_db
+    image: postgres:16.0
+    restart: always
+    environment:
+      - POSTGRES_USER=auto_trendz_db_us3r
+      - POSTGRES_PASSWORD=4Vrlf&h2Y#?0z|)*[9,*{E
+      - POSTGRES_DB=autotrendz
+    volumes:
+      - ./.data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - autotrendz_network
+
+networks:
+  autotrendz_network:
+    driver: bridge
+  main:
+    external: true

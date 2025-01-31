@@ -1,0 +1,24 @@
+{
+  "type": "module",
+  "name": "hipervarejo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "LanAlmeida",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.8",
+    "axios-retry": "^4.0.0",
+    "html-to-text": "^9.0.5",
+    "p-limit": "^5.0.0",
+    "sitemapper": "^3.2.8",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.28"
+  }
+}

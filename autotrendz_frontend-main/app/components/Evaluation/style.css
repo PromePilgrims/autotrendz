@@ -1,0 +1,11 @@
+.carousel-container {
+  padding-bottom: 28px;
+  margin-top: 32px;
+  width: 100%;
+  margin-left: 52px;
+  /* cursor: grab; */
+}
+
+/* .carousel-container:active {
+  cursor: grabbing;
+} */

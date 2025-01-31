@@ -1,0 +1,22 @@
+{
+  "type": "module",
+  "name": "paulinho_motos",
+  "version": "1.0.0",
+  "main": "get_urls.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "LanAlmeida",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.6.8",
+    "axios-retry": "^4.1.0",
+    "cheerio": "^1.0.0-rc.12",
+    "html-to-text": "^9.0.5",
+    "p-limit": "^5.0.0",
+    "sitemapper": "^3.2.8",
+    "xlsx": "^0.18.5"
+  }
+}

@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  odontotrendz_data_proxy:
+    platform: linux/x86_64
+    image: ghcr.io/autotrendz/odontotrendz_data_proxy:latest
+    restart: always
+    env_file:
+      - .env
+    container_name: odontotrendz_data_proxy
+    networks:
+      - main
+
+networks:
+  main:
+    external: true

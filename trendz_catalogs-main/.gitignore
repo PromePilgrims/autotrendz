@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env
+databases/
+.DS_Store
+
+## Docker
+.data/

@@ -1,0 +1,266 @@
+[
+  {
+    "id": 3425,
+    "external_code": "4919",
+    "catalog_id": 1,
+    "manufacturer_id": null,
+    "observation_id": null,
+    "name": "RETENTOR DE RODA",
+    "number": "R220358N",
+    "number_for_search": "R220358N",
+    "pcs": " R22O358N RETENTOR DE RODA O2324BRG 2324BRG 7619N SCANIA VOLKSWAGEN 16S 13OO 16S 16OO 16S 165O 16S 19OO FUSCA ",
+    "created_at": "2025-01-22T12:16:42.635Z",
+    "observation": "Cubo de Roda Dianteiro",
+    "properties": [
+      {
+        "id": 20550,
+        "product_id": 3425,
+        "type_id": 6,
+        "value": "",
+        "type": "Espessura"
+      },
+      {
+        "id": 20549,
+        "product_id": 3425,
+        "type_id": 5,
+        "value": "Nitrílico",
+        "type": "Material"
+      },
+      {
+        "id": 20548,
+        "product_id": 3425,
+        "type_id": 4,
+        "value": "",
+        "type": "Fibra"
+      },
+      {
+        "id": 20547,
+        "product_id": 3425,
+        "type_id": 3,
+        "value": "8.00",
+        "type": "Altura"
+      },
+      {
+        "id": 20546,
+        "product_id": 3425,
+        "type_id": 2,
+        "value": "65.00",
+        "type": "Diâmetro do Alojamento"
+      },
+      {
+        "id": 20545,
+        "product_id": 3425,
+        "type_id": 1,
+        "value": "45.00",
+        "type": "Diâmetro"
+      }
+    ],
+    "applications": [
+      {
+        "id": 2426,
+        "external_code": "14287",
+        "catalog_id": 1,
+        "manufacturer_id": 9,
+        "manufacturer": "VOLKSWAGEN",
+        "properties": [
+          {
+            "id": 9701,
+            "application_id": 2426,
+            "type_id": 1,
+            "value": "Fusca",
+            "value_complement": null,
+            "type": "Veiculo"
+          },
+          {
+            "id": 9702,
+            "application_id": 2426,
+            "type_id": 2,
+            "value": "",
+            "value_complement": null,
+            "type": "Motor"
+          },
+          {
+            "id": 9703,
+            "application_id": 2426,
+            "type_id": 3,
+            "value": "67/...",
+            "value_complement": null,
+            "type": "Ano"
+          },
+          {
+            "id": 9704,
+            "application_id": 2426,
+            "type_id": 4,
+            "value": "",
+            "value_complement": null,
+            "type": "Observação"
+          }
+        ]
+      },
+      {
+        "id": 3399,
+        "external_code": "3986",
+        "catalog_id": 1,
+        "manufacturer_id": 28,
+        "manufacturer": "SCANIA",
+        "properties": [
+          {
+            "id": 13593,
+            "application_id": 3399,
+            "type_id": 1,
+            "value": "16S 1300",
+            "value_complement": null,
+            "type": "Veiculo"
+          },
+          {
+            "id": 13594,
+            "application_id": 3399,
+            "type_id": 2,
+            "value": "",
+            "value_complement": null,
+            "type": "Motor"
+          },
+          {
+            "id": 13595,
+            "application_id": 3399,
+            "type_id": 3,
+            "value": "",
+            "value_complement": null,
+            "type": "Ano"
+          },
+          {
+            "id": 13596,
+            "application_id": 3399,
+            "type_id": 4,
+            "value": "16S Eixo Piloto Caixa Mudança (Caixa de câmbio 16S)",
+            "value_complement": null,
+            "type": "Observação"
+          }
+        ]
+      },
+      {
+        "id": 3400,
+        "external_code": "3987",
+        "catalog_id": 1,
+        "manufacturer_id": 28,
+        "manufacturer": "SCANIA",
+        "properties": [
+          {
+            "id": 13597,
+            "application_id": 3400,
+            "type_id": 1,
+            "value": "16S 1600",
+            "value_complement": null,
+            "type": "Veiculo"
+          },
+          {
+            "id": 13598,
+            "application_id": 3400,
+            "type_id": 2,
+            "value": "",
+            "value_complement": null,
+            "type": "Motor"
+          },
+          {
+            "id": 13599,
+            "application_id": 3400,
+            "type_id": 3,
+            "value": "",
+            "value_complement": null,
+            "type": "Ano"
+          },
+          {
+            "id": 13600,
+            "application_id": 3400,
+            "type_id": 4,
+            "value": "16S Eixo Piloto Caixa Mudança (Caixa de câmbio 16S)",
+            "value_complement": null,
+            "type": "Observação"
+          }
+        ]
+      },
+      {
+        "id": 3401,
+        "external_code": "3988",
+        "catalog_id": 1,
+        "manufacturer_id": 28,
+        "manufacturer": "SCANIA",
+        "properties": [
+          {
+            "id": 13601,
+            "application_id": 3401,
+            "type_id": 1,
+            "value": "16S 1900",
+            "value_complement": null,
+            "type": "Veiculo"
+          },
+          {
+            "id": 13602,
+            "application_id": 3401,
+            "type_id": 2,
+            "value": "",
+            "value_complement": null,
+            "type": "Motor"
+          },
+          {
+            "id": 13603,
+            "application_id": 3401,
+            "type_id": 3,
+            "value": "",
+            "value_complement": null,
+            "type": "Ano"
+          },
+          {
+            "id": 13604,
+            "application_id": 3401,
+            "type_id": 4,
+            "value": "16S Eixo Piloto Caixa Mudança (Caixa de câmbio 16S)",
+            "value_complement": null,
+            "type": "Observação"
+          }
+        ]
+      },
+      {
+        "id": 3402,
+        "external_code": "3989",
+        "catalog_id": 1,
+        "manufacturer_id": 28,
+        "manufacturer": "SCANIA",
+        "properties": [
+          {
+            "id": 13605,
+            "application_id": 3402,
+            "type_id": 1,
+            "value": "16S 1650",
+            "value_complement": null,
+            "type": "Veiculo"
+          },
+          {
+            "id": 13606,
+            "application_id": 3402,
+            "type_id": 2,
+            "value": "",
+            "value_complement": null,
+            "type": "Motor"
+          },
+          {
+            "id": 13607,
+            "application_id": 3402,
+            "type_id": 3,
+            "value": "",
+            "value_complement": null,
+            "type": "Ano"
+          },
+          {
+            "id": 13608,
+            "application_id": 3402,
+            "type_id": 4,
+            "value": "16S Eixo Piloto Caixa Mudança (Caixa de câmbio 16S)",
+            "value_complement": null,
+            "type": "Observação"
+          }
+        ]
+      }
+    ]
+  }
+]

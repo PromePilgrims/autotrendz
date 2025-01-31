@@ -1,0 +1,17 @@
+{
+  "type": "module",
+  "name": "loja_mecanico",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "LanAlmeida",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.8",
+    "axios-retry": "^4.1.0",
+    "cheerio": "^1.0.0-rc.12",
+    "jsonstream": "^1.0.3",
+    "p-limit": "^5.0.0",
+    "sitemapper": "^3.2.8",
+    "xlsx": "^0.18.5"
+  }
+}

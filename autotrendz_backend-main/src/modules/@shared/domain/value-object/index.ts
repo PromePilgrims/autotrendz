@@ -1,0 +1,5 @@
+export * from './name.value-object'
+export * from './email.value-object'
+export * from './image.value-object'
+export * from './password.value-object'
+export * from './url.value-object'

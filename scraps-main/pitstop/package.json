@@ -1,0 +1,22 @@
+{
+  "type": "module",
+  "name": "cornelio_autopecas",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "LanAlmeida",
+  "license": "ISC",
+  "dependencies": {
+    "@atomictech/xlsx-write-stream": "^2.0.2",
+    "axios": "^1.7.2",
+    "axios-retry": "^4.4.0",
+    "html-to-text": "^9.0.5",
+    "sitemapper": "^3.2.8",
+    "tslib": "^2.6.3",
+    "xlsx-write-stream": "^1.0.2"
+  }
+}
